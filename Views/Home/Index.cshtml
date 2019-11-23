@@ -1,8 +1,38 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Data Viewer";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <div class="container" style="padding:5px">
+        <h4>Current table and filters</h4>
+        <div class="row" style="padding:7px">
+            <div class="col-md-4">
+                Table
+                <select>
+                    <option value="table1" selected>Table 1</option>
+                    <option value="table2">Table 2</option>
+                </select>
+            </div>
+            <div class="col-md-7">
+                Column
+                <select>
+                    <option value="=" selected>=</option>
+                </select>
+                <input type="text" />
+            </div>
+            <div class="col-md-1">
+                <input type="button" value="Add" class="btn-secondary" />
+            </div>
+        </div>
+        <div class="row" style="padding:7px">
+            <div class="col-md-1">
+                Filters
+            </div>
+            <div class="col-md-10">
+                <textarea style="width:inherit" rows="2" readonly></textarea>
+            </div>
+            <div class="col-md-1">
+                <input type="button" value="Apply" class="btn-primary" />
+            </div>
+        </div>
+    </div>
+<br />
