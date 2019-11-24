@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using DataViewer.Models;
 using Microsoft.Extensions.Options;
 
+
 namespace DataViewer.Controllers
 {
     public class HomeController : Controller
@@ -22,10 +23,31 @@ namespace DataViewer.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        [HttpPost]
+        public IActionResult GetParentTables()
         {
-            return View();
+            List<Something> list = new List<Something>();
+            list.Add(new Something("Person A"));
+
+            return Json(new { recordsFiltered = 1, recordsTotal = 1, data = list.ToArray() });
+            //return "{ \"data\": [{ \"name1\": \"Johns\" }, { \"name1\": \"Kevin\" }, { \"name1\": \"Kevin\" }, { \"name1\": \"Larry\" }] }";
         }
+
+        public class Something
+        {
+            public Something(string name)
+            {
+                Name1 = name;
+            }
+            public string Name1 { get; set; }
+        }
+
+
+
+
+
+
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

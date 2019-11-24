@@ -3,6 +3,29 @@
 
 // Write your JavaScript code.
 
-    $(document).ready(function () {
-//        alert("hello world");
-});
+$(document).ready(function () {
+    
+
+    $.ajax({
+        type: "POST",
+        url: "/Home/GetParentTables",
+        dataType: "json",
+        success: function (result) {
+            
+            //var staticData = { "data": [{ "name1": "Johns" }, { "name1": "Kevin" }] };
+            //var stringfiedData = JSON.stringify(staticData.data);
+            $("#parentDataTable").DataTable(
+                {
+                    "data": result.data,
+                    "columns": [
+                        { "data": "name1" }
+                        ]
+                }
+            );
+        },
+        error: function (error) {
+            alert('error');
+            alert(error.toString());
+        }
+    });
+})

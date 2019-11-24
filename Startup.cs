@@ -36,6 +36,7 @@ namespace DataViewer
             // get config options
             IConfigurationSection sec = Configuration.GetSection("ConnectionStrings");
             services.Configure<ConnectionStringOptions>(sec);
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
