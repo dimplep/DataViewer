@@ -13,12 +13,14 @@ $(document).ready(function () {
         success: function (result) {
             
             //var staticData = { "data": [{ "name1": "Johns" }, { "name1": "Kevin" }] };
-            //var stringfiedData = JSON.stringify(staticData.data);
+            //var stringfiedData = JSON.parse(staticData.data);
             $("#parentDataTable").DataTable(
                 {
                     "data": result.data,
                     "columns": [
-                        { "data": "name1" }
+                        { "data": "Person Name" },
+                        { "data": "Age" },
+                        { "data": "DateHire" },
                         ]
                 }
             );
