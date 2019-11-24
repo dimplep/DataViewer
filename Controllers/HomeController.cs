@@ -25,8 +25,8 @@ namespace DataViewer.Controllers
             return View();
         }
 
-        [HttpPost]
-        public IActionResult GetParentTables()
+        [HttpGet]
+        public IActionResult GetParentTables(TestViewModel model)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Person Name", typeof(string));
