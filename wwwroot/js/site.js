@@ -11,17 +11,21 @@ $(document).ready(function () {
         url: "/Home/GetParentTables",
         dataType: "json",
         success: function (result) {
-            
             //var staticData = { "data": [{ "name1": "Johns" }, { "name1": "Kevin" }] };
             //var stringfiedData = JSON.parse(staticData.data);
+
+            var tableName = '#parentDataTable';
+            var str;
+
+            $.each(result.columns, function (k, colObj) {
+                str = '<th>' + colObj.name + '</th>';
+                $(str).appendTo(tableName + '>thead>tr');
+            });
+
             $("#parentDataTable").DataTable(
                 {
                     "data": result.data,
-                    "columns": [
-                        { "data": "Person Name" },
-                        { "data": "Age" },
-                        { "data": "DateHire" },
-                        ]
+                    "columns": result.columns
                 }
             );
         },
