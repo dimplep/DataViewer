@@ -7,6 +7,17 @@ using System.Threading.Tasks;
 
 namespace DataViewer.Lib
 {
+
+    public class DataTableLib
+    {
+        public bool IsNumericColumn(TypeCode typeCode)
+        {
+            return (typeCode == TypeCode.Int16 || typeCode == TypeCode.Int32 || typeCode == TypeCode.Int64
+                || typeCode == TypeCode.Byte || typeCode == TypeCode.Decimal || typeCode == TypeCode.Double
+                || typeCode == TypeCode.Single);
+        }
+    }
+
     public static class DataTableExtensions
     {
         // Does jquery datatables friendly data conversion and creates a list
@@ -40,10 +51,19 @@ namespace DataViewer.Lib
         // returns jquery datatables friendly list of columns
         public static List<JQDTFriendlyColumnInfo> JQDTFriendlyColumnList(this DataTable dt)
         {
+            DataTableLib dtLib = new DataTableLib();
             List<JQDTFriendlyColumnInfo> list = new List<JQDTFriendlyColumnInfo>();
             foreach (DataColumn col in dt.Columns)
             {
-                list.Add(new JQDTFriendlyColumnInfo(col.ColumnName));
+                if (dtLib.IsNumericColumn(Type.GetTypeCode(col.DataType)))
+                {
+                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, AppConst.JQDT_COL_ALIGN_RIGHT));
+                }
+                else
+                {
+                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName));
+                }
+                
             }
             return list;
         }
@@ -53,10 +73,12 @@ namespace DataViewer.Lib
     {
         public string data { get; set; }
         public string name { get; set; }
-        public JQDTFriendlyColumnInfo(string colName)
+        public string className { get; set; }
+        public JQDTFriendlyColumnInfo(string colName, string colAlignment = AppConst.JQDT_COL_ALIGN_LEFT)
         {
             data = colName;
             name = colName;
+            className = colAlignment;
         }
     }
 }
