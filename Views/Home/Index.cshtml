@@ -5,14 +5,14 @@
 <div class="container" style="padding:5px">
     <h4>Current table and filters</h4>
     <div class="row" style="padding:7px">
-        <div class="col-md-4">
+        <div class="col-md-2">
             <label for="currentTableSelect">Table: </label>
             <select id="currentTableSelect">
                 <option value="table1" selected>Table 1</option>
                 <option value="table2">Table 2</option>
             </select>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-6">
             <label for="currentColumnSelect">Column: </label>
             <select id="currentColumnSelect">
                 <option value="col1" selected>Column 1</option>
@@ -30,7 +30,7 @@
             </select>
             <input type="text" />
         </div>
-        <div class="col-md-1">
+        <div class="col-md-4">
             <input type="button" id="AddFilterBtn" value="Add" class="btn-secondary" />
         </div>
     </div>
@@ -38,10 +38,14 @@
         <div class="col-md-1">
             <label for="filterCriteriaText">Criteria:</label>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
             <textarea id="filterCriteriaText" style="width:inherit" rows="2" readonly></textarea>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-2">
+            <label for="topInput">Top: </label>
+            <input type="number" id="topInput" min="1" max="999" style="width:60px" value="100" />
+        </div>
+        <div class="col-md-1" align="right">
             <input type="button" id="ApplyFilterBtn" value="Apply" class="btn-primary" onclick="GetParentData();" />
         </div>
     </div>
@@ -50,14 +54,17 @@
 <div class="container" style="padding:5px">
     <h4>Child relations</h4>
     <div class="row" style="padding:7px">
-        <div class="col-md-10">
+        <div class="col-md-4">
             <label for="childTableSelect">Child: </label>
             <select id="childTableSelect">
                 <option value="table1" selected>Table 1</option>
                 <option value="table2">Table 2</option>
             </select>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-6">
+            <input type="button" id="AddFilterBtn" value="Navigate From Selected Row" class="btn-secondary" />
+        </div>
+        <div class="col-md-2" align="right">
             <label for="hideIfNoDataCheck">Hide if no data: </label>
             <input type="checkbox" id="hideIfNoDataCheck" checked />
         </div>
@@ -71,12 +78,15 @@
 <div class="container" style="padding:5px">
     <h4>Parent relations</h4>
     <div class="row" style="padding:7px">
-        <div class="col-md-12">
+        <div class="col-md-4">
             <label for="parentTableSelect">Parent: </label>
             <select id="parentTableSelect">
                 <option value="table1" selected>Table 1</option>
                 <option value="table2">Table 2</option>
             </select>
+        </div>
+        <div class="col-md-8">
+            <input type="button" id="AddFilterBtn" value="Navigate From Selected Row" class="btn-secondary" />
         </div>
     </div>
     <div class="table-responsive">
