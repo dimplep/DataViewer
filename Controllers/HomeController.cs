@@ -9,15 +9,20 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using System.Dynamic;
 using DataViewer.Lib;
+using DataViewer.Data;
 
 namespace DataViewer.Controllers
 {
     public class HomeController : Controller
     {
-        string connStr;
-        public HomeController(IOptions<ConnectionStringOptions> op)
+        IDataAccess dataAccess;
+        public HomeController(IOptions<DateSettingOptions> op)
         {
-            connStr = op.Value.DataViewerConnStr;
+            
+            string connStr = op.Value.ConnectionString;
+            string dbms = op.Value.RDBMS;
+            // this could have passed to controller as well
+            dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms);
         }
 
         public IActionResult Index()

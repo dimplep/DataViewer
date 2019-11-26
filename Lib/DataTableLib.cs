@@ -57,7 +57,7 @@ namespace DataViewer.Lib
             {
                 if (dtLib.IsNumericColumn(Type.GetTypeCode(col.DataType)))
                 {
-                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, AppConst.JQDT_COL_ALIGN_RIGHT));
+                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, AppConst.JQDT_COL_ALIGN.RIGHT));
                 }
                 else
                 {
@@ -74,7 +74,7 @@ namespace DataViewer.Lib
         public string data { get; set; }
         public string name { get; set; }
         public string className { get; set; }
-        public JQDTFriendlyColumnInfo(string colName, string colAlignment = AppConst.JQDT_COL_ALIGN_LEFT)
+        public JQDTFriendlyColumnInfo(string colName, string colAlignment = AppConst.JQDT_COL_ALIGN.LEFT)
         {
             data = colName;
             name = colName;

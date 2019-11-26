@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace DataViewer
 {
-    public class ConnectionStringOptions
+    public class DateSettingOptions
     {
-        public string DataViewerConnStr { get; set; }
+        public string ConnectionString { get; set; }
+        public string RDBMS { get; set; }
     }
 }

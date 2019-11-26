@@ -13,6 +13,7 @@ namespace DataViewer
 {
     public class Startup
     {
+        public static string RDBMS { get; }
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,9 +35,10 @@ namespace DataViewer
 
 
             // get config options
-            IConfigurationSection sec = Configuration.GetSection("ConnectionStrings");
-            services.Configure<ConnectionStringOptions>(sec);
+            IConfigurationSection sec = Configuration.GetSection("DataSettings");
+            services.Configure<DateSettingOptions>(sec);
             
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
