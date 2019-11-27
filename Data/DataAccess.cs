@@ -35,7 +35,7 @@ namespace DataViewer.Data
             IDataAccess dataAccess;
             switch (dbms)
             {
-                case AppConst.DBMS.MYSQL:
+                case AppConst.DBMS.SQLSERVER:
                     dataAccess = new SQLDataAccess(connectionString);
                     break;
                 default:
