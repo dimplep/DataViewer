@@ -1,0 +1,548 @@
+[
+  {
+    "ChildTable": "HumanResources.Employee",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "HumanResources.EmployeeDepartmentHistory",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "HumanResources.EmployeeDepartmentHistory",
+    "ChildKey": "DepartmentID",
+    "ParentTable": "HumanResources.Department",
+    "ParentKey": "DepartmentID"
+  },
+  {
+    "ChildTable": "HumanResources.EmployeeDepartmentHistory",
+    "ChildKey": "ShiftID",
+    "ParentTable": "HumanResources.Shift",
+    "ParentKey": "ShiftID"
+  },
+  {
+    "ChildTable": "HumanResources.EmployeePayHistory",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "HumanResources.JobCandidate",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.Address",
+    "ChildKey": "StateProvinceID",
+    "ParentTable": "Person.StateProvince",
+    "ParentKey": "StateProvinceID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityAddress",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.BusinessEntity",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityAddress",
+    "ChildKey": "AddressID",
+    "ParentTable": "Person.Address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityAddress",
+    "ChildKey": "AddressTypeID",
+    "ParentTable": "Person.AddressType",
+    "ParentKey": "AddressTypeID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityContact",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.BusinessEntity",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityContact",
+    "ChildKey": "PersonID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.BusinessEntityContact",
+    "ChildKey": "ContactTypeID",
+    "ParentTable": "Person.ContactType",
+    "ParentKey": "ContactTypeID"
+  },
+  {
+    "ChildTable": "Person.EmailAddress",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.Password",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.Person",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.BusinessEntity",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.PersonPhone",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Person.PersonPhone",
+    "ChildKey": "PhoneNumberTypeID",
+    "ParentTable": "Person.PhoneNumberType",
+    "ParentKey": "PhoneNumberTypeID"
+  },
+  {
+    "ChildTable": "Person.StateProvince",
+    "ChildKey": "CountryRegionCode",
+    "ParentTable": "Person.CountryRegion",
+    "ParentKey": "CountryRegionCode"
+  },
+  {
+    "ChildTable": "Person.StateProvince",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "Sales.SalesTerritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "Production.BillOfMaterials",
+    "ChildKey": "ProductAssemblyID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.BillOfMaterials",
+    "ChildKey": "ComponentID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.BillOfMaterials",
+    "ChildKey": "UnitMeasureCode",
+    "ParentTable": "Production.UnitMeasure",
+    "ParentKey": "UnitMeasureCode"
+  },
+  {
+    "ChildTable": "Production.Document",
+    "ChildKey": "Owner",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Production.Product",
+    "ChildKey": "SizeUnitMeasureCode",
+    "ParentTable": "Production.UnitMeasure",
+    "ParentKey": "UnitMeasureCode"
+  },
+  {
+    "ChildTable": "Production.Product",
+    "ChildKey": "WeightUnitMeasureCode",
+    "ParentTable": "Production.UnitMeasure",
+    "ParentKey": "UnitMeasureCode"
+  },
+  {
+    "ChildTable": "Production.Product",
+    "ChildKey": "ProductSubcategoryID",
+    "ParentTable": "Production.ProductSubcategory",
+    "ParentKey": "ProductSubcategoryID"
+  },
+  {
+    "ChildTable": "Production.Product",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "Production.ProductModel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "Production.ProductCostHistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductDocument",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductDocument",
+    "ChildKey": "DocumentNode",
+    "ParentTable": "Production.Document",
+    "ParentKey": "DocumentNode"
+  },
+  {
+    "ChildTable": "Production.ProductInventory",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductInventory",
+    "ChildKey": "LocationID",
+    "ParentTable": "Production.Location",
+    "ParentKey": "LocationID"
+  },
+  {
+    "ChildTable": "Production.ProductListPriceHistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductModelIllustration",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "Production.ProductModel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "Production.ProductModelIllustration",
+    "ChildKey": "IllustrationID",
+    "ParentTable": "Production.Illustration",
+    "ParentKey": "IllustrationID"
+  },
+  {
+    "ChildTable": "Production.ProductModelProductDescriptionCulture",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "Production.ProductModel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "Production.ProductModelProductDescriptionCulture",
+    "ChildKey": "ProductDescriptionID",
+    "ParentTable": "Production.ProductDescription",
+    "ParentKey": "ProductDescriptionID"
+  },
+  {
+    "ChildTable": "Production.ProductModelProductDescriptionCulture",
+    "ChildKey": "CultureID",
+    "ParentTable": "Production.Culture",
+    "ParentKey": "CultureID"
+  },
+  {
+    "ChildTable": "Production.ProductProductPhoto",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductProductPhoto",
+    "ChildKey": "ProductPhotoID",
+    "ParentTable": "Production.ProductPhoto",
+    "ParentKey": "ProductPhotoID"
+  },
+  {
+    "ChildTable": "Production.ProductReview",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.ProductSubcategory",
+    "ChildKey": "ProductCategoryID",
+    "ParentTable": "Production.ProductCategory",
+    "ParentKey": "ProductCategoryID"
+  },
+  {
+    "ChildTable": "Production.TransactionHistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.WorkOrder",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Production.WorkOrder",
+    "ChildKey": "ScrapReasonID",
+    "ParentTable": "Production.ScrapReason",
+    "ParentKey": "ScrapReasonID"
+  },
+  {
+    "ChildTable": "Production.WorkOrderRouting",
+    "ChildKey": "WorkOrderID",
+    "ParentTable": "Production.WorkOrder",
+    "ParentKey": "WorkOrderID"
+  },
+  {
+    "ChildTable": "Production.WorkOrderRouting",
+    "ChildKey": "LocationID",
+    "ParentTable": "Production.Location",
+    "ParentKey": "LocationID"
+  },
+  {
+    "ChildTable": "Purchasing.ProductVendor",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Purchasing.ProductVendor",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Purchasing.Vendor",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Purchasing.ProductVendor",
+    "ChildKey": "UnitMeasureCode",
+    "ParentTable": "Production.UnitMeasure",
+    "ParentKey": "UnitMeasureCode"
+  },
+  {
+    "ChildTable": "Purchasing.PurchaseOrderDetail",
+    "ChildKey": "PurchaseOrderID",
+    "ParentTable": "Purchasing.PurchaseOrderHeader",
+    "ParentKey": "PurchaseOrderID"
+  },
+  {
+    "ChildTable": "Purchasing.PurchaseOrderDetail",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Purchasing.PurchaseOrderHeader",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Purchasing.PurchaseOrderHeader",
+    "ChildKey": "VendorID",
+    "ParentTable": "Purchasing.Vendor",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Purchasing.PurchaseOrderHeader",
+    "ChildKey": "ShipMethodID",
+    "ParentTable": "Purchasing.ShipMethod",
+    "ParentKey": "ShipMethodID"
+  },
+  {
+    "ChildTable": "Purchasing.Vendor",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.BusinessEntity",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.CountryRegionCurrency",
+    "ChildKey": "CountryRegionCode",
+    "ParentTable": "Person.CountryRegion",
+    "ParentKey": "CountryRegionCode"
+  },
+  {
+    "ChildTable": "Sales.CountryRegionCurrency",
+    "ChildKey": "CurrencyCode",
+    "ParentTable": "Sales.Currency",
+    "ParentKey": "CurrencyCode"
+  },
+  {
+    "ChildTable": "Sales.CurrencyRate",
+    "ChildKey": "FromCurrencyCode",
+    "ParentTable": "Sales.Currency",
+    "ParentKey": "CurrencyCode"
+  },
+  {
+    "ChildTable": "Sales.CurrencyRate",
+    "ChildKey": "ToCurrencyCode",
+    "ParentTable": "Sales.Currency",
+    "ParentKey": "CurrencyCode"
+  },
+  {
+    "ChildTable": "Sales.Customer",
+    "ChildKey": "PersonID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.Customer",
+    "ChildKey": "StoreID",
+    "ParentTable": "Sales.Store",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.Customer",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "Sales.SalesTerritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "Sales.PersonCreditCard",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.Person",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.PersonCreditCard",
+    "ChildKey": "CreditCardID",
+    "ParentTable": "Sales.CreditCard",
+    "ParentKey": "CreditCardID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderDetail",
+    "ChildKey": "SalesOrderID",
+    "ParentTable": "Sales.SalesOrderHeader",
+    "ParentKey": "SalesOrderID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderDetail",
+    "ChildKey": "ProductID",
+    "ParentTable": "Sales.SpecialOfferProduct",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderDetail",
+    "ChildKey": "SpecialOfferID",
+    "ParentTable": "Sales.SpecialOfferProduct",
+    "ParentKey": "SpecialOfferID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "CustomerID",
+    "ParentTable": "Sales.Customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "SalesPersonID",
+    "ParentTable": "Sales.SalesPerson",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "Sales.SalesTerritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "BillToAddressID",
+    "ParentTable": "Person.Address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "ShipToAddressID",
+    "ParentTable": "Person.Address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "ShipMethodID",
+    "ParentTable": "Purchasing.ShipMethod",
+    "ParentKey": "ShipMethodID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "CreditCardID",
+    "ParentTable": "Sales.CreditCard",
+    "ParentKey": "CreditCardID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeader",
+    "ChildKey": "CurrencyRateID",
+    "ParentTable": "Sales.CurrencyRate",
+    "ParentKey": "CurrencyRateID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeaderSalesReason",
+    "ChildKey": "SalesOrderID",
+    "ParentTable": "Sales.SalesOrderHeader",
+    "ParentKey": "SalesOrderID"
+  },
+  {
+    "ChildTable": "Sales.SalesOrderHeaderSalesReason",
+    "ChildKey": "SalesReasonID",
+    "ParentTable": "Sales.SalesReason",
+    "ParentKey": "SalesReasonID"
+  },
+  {
+    "ChildTable": "Sales.SalesPerson",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "HumanResources.Employee",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.SalesPerson",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "Sales.SalesTerritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "Sales.SalesPersonQuotaHistory",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Sales.SalesPerson",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.SalesTaxRate",
+    "ChildKey": "StateProvinceID",
+    "ParentTable": "Person.StateProvince",
+    "ParentKey": "StateProvinceID"
+  },
+  {
+    "ChildTable": "Sales.SalesTerritory",
+    "ChildKey": "CountryRegionCode",
+    "ParentTable": "Person.CountryRegion",
+    "ParentKey": "CountryRegionCode"
+  },
+  {
+    "ChildTable": "Sales.SalesTerritoryHistory",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Sales.SalesPerson",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.SalesTerritoryHistory",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "Sales.SalesTerritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "Sales.ShoppingCartItem",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Sales.SpecialOfferProduct",
+    "ChildKey": "SpecialOfferID",
+    "ParentTable": "Sales.SpecialOffer",
+    "ParentKey": "SpecialOfferID"
+  },
+  {
+    "ChildTable": "Sales.SpecialOfferProduct",
+    "ChildKey": "ProductID",
+    "ParentTable": "Production.Product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "Sales.Store",
+    "ChildKey": "BusinessEntityID",
+    "ParentTable": "Person.BusinessEntity",
+    "ParentKey": "BusinessEntityID"
+  },
+  {
+    "ChildTable": "Sales.Store",
+    "ChildKey": "SalesPersonID",
+    "ParentTable": "Sales.SalesPerson",
+    "ParentKey": "BusinessEntityID"
+  }
+]

@@ -9,5 +9,6 @@ namespace DataViewer
     {
         public string ConnectionString { get; set; }
         public string RDBMS { get; set; }
+        public string RelationsJsonFileName { get; set; }
     }
 }

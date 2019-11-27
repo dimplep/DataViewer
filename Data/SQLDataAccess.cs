@@ -8,7 +8,7 @@ namespace DataViewer.Data
     // SQL SERVER DATA ACCESS
     public class SQLDataAccess : DataAccess
     {
-        public SQLDataAccess(string connectionString) : base(connectionString)
+        public SQLDataAccess(string connectionString, string relationsJsonFileName) : base(connectionString, relationsJsonFileName)
         {
         }
 

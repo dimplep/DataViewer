@@ -21,8 +21,9 @@ namespace DataViewer.Controllers
             
             string connStr = op.Value.ConnectionString;
             string dbms = op.Value.RDBMS;
+            string relationsJsonFileName = op.Value.RelationsJsonFileName;
             // this could have passed to controller as well
-            dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms);
+            dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms, relationsJsonFileName);
         }
 
         public IActionResult Index()

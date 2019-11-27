@@ -21,3 +21,7 @@ where pk_tab.name is not null
 order by schema_name(tab.schema_id) + '.' + tab.name,
     col.column_id
 	
+
+/*
+	To convert result to json you may use free online tool like https://www.csvjson.com/csv2json
+*/

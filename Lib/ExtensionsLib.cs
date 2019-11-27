@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Dynamic;
@@ -7,19 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataViewer.Lib
 {
-
-    public class DataTableLib
+    public static class ExtensionsLib
     {
-        public bool IsNumericColumn(TypeCode typeCode)
-        {
-            return (typeCode == TypeCode.Int16 || typeCode == TypeCode.Int32 || typeCode == TypeCode.Int64
-                || typeCode == TypeCode.Byte || typeCode == TypeCode.Decimal || typeCode == TypeCode.Double
-                || typeCode == TypeCode.Single);
-        }
-    }
 
-    public static class DataTableExtensions
-    {
         // Does jquery datatables friendly data conversion and creates a list
         public static List<dynamic> JQDTFriendlyTableData(this DataTable dt)
         {
@@ -51,11 +43,10 @@ namespace DataViewer.Lib
         // returns jquery datatables friendly list of columns
         public static List<JQDTFriendlyColumnInfo> JQDTFriendlyColumnList(this DataTable dt)
         {
-            DataTableLib dtLib = new DataTableLib();
             List<JQDTFriendlyColumnInfo> list = new List<JQDTFriendlyColumnInfo>();
             foreach (DataColumn col in dt.Columns)
             {
-                if (dtLib.IsNumericColumn(Type.GetTypeCode(col.DataType)))
+                if (Type.GetTypeCode(col.DataType).IsNumericColumn())
                 {
                     list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, AppConst.JQDT_COL_ALIGN.RIGHT));
                 }
@@ -63,10 +54,27 @@ namespace DataViewer.Lib
                 {
                     list.Add(new JQDTFriendlyColumnInfo(col.ColumnName));
                 }
-                
+
             }
             return list;
         }
+
+        // returns data table from json
+        public static DataTable JsonToDatatable(this String jsonString)
+        {
+            var jsonArray = JArray.Parse(jsonString);
+
+            return JsonConvert.DeserializeObject<DataTable>(jsonArray.ToString());
+        }
+
+        public static bool IsNumericColumn(this TypeCode typeCode)
+        {
+            return (typeCode == TypeCode.Int16 || typeCode == TypeCode.Int32 || typeCode == TypeCode.Int64
+                || typeCode == TypeCode.Byte || typeCode == TypeCode.Decimal || typeCode == TypeCode.Double
+                || typeCode == TypeCode.Single);
+        }
+
+
     }
 
     public class JQDTFriendlyColumnInfo
@@ -81,4 +89,6 @@ namespace DataViewer.Lib
             className = colAlignment;
         }
     }
+
 }
+
