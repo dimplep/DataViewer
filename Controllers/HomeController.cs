@@ -15,15 +15,23 @@ namespace DataViewer.Controllers
 {
     public class HomeController : Controller
     {
-        IDataAccess dataAccess;
+        IDataAccess _dataAccess;
+        BusinessLayer _businessLayer;
+        DataTable _relations;
         public HomeController(IOptions<DateSettingOptions> op)
         {
             
             string connStr = op.Value.ConnectionString;
             string dbms = op.Value.RDBMS;
             string relationsJsonFileName = op.Value.RelationsJsonFileName;
+            
             // this could have passed to controller as well
-            dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms, relationsJsonFileName);
+            _dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms);
+            _relations = Relations.GetRelations(relationsJsonFileName);
+            _businessLayer = new BusinessLayer(_dataAccess, _relations);
+
+            var allTables = _businessLayer.AllTables();
+            var allTables2 = _businessLayer.AllTables();
         }
 
         public IActionResult Index()
@@ -31,10 +39,16 @@ namespace DataViewer.Controllers
             return View();
         }
 
+        //[HttpGet]
+        //public IActionResult AllTables()
+        //{
+        //    return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = dt.JQDTFriendlyColumnList() });
+        //}
+
         [HttpGet]
         public IActionResult GetParentTables(TestViewModel model)
         {
-            DataTable dt = dataAccess.GetData("select top 100 * from Production.Location");
+            DataTable dt = _dataAccess.GetData("select top 100 * from Production.Location");
 
             //dt.Columns.Add("Person Name", typeof(string));
             //dt.Columns.Add("Age", typeof(int));

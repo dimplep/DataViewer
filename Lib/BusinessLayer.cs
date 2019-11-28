@@ -6,34 +6,29 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
+using static DataViewer.Lib.AppConst;
 
 namespace DataViewer.Lib
 {
     public class BusinessLayer
     {
-        private DataTable ConvertJsonToDatatable(string jsonString)
+        private IDataAccess _dataAccess;
+        private DataTable _relations;
+
+        public BusinessLayer(IDataAccess dataAccess, DataTable relations)
         {
-            var jsonLinq = JObject.Parse(jsonString);
-
-            // Find the first array using Linq
-            var linqArray = jsonLinq.Descendants().Where(x => x is JArray).First();
-            var jsonArray = new JArray();
-            foreach (JObject row in linqArray.Children<JObject>())
-            {
-                var createRow = new JObject();
-                foreach (JProperty column in row.Properties())
-                {
-                    // Only include JValue types
-                    if (column.Value is JValue)
-                    {
-                        createRow.Add(column.Name, column.Value);
-                    }
-                }
-                jsonArray.Add(createRow);
-            }
-
-            return JsonConvert.DeserializeObject<DataTable>(jsonArray.ToString());
+            _dataAccess = dataAccess;
+            _relations = relations;
         }
 
+        public List<string> AllTables()
+        {
+            List<string> list = ((from row in _relations.AsEnumerable()
+                           select row.Field<string>(RelationDataColumns.PARENTTABLE))
+                           .Union(from row in _relations.AsEnumerable()
+                                  select row.Field<string>(RelationDataColumns.CHILDTABLE))).Distinct().OrderBy(o => o).ToList();
+
+            return list;
+        }
     }
 }

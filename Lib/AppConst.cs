@@ -18,5 +18,13 @@ namespace DataViewer.Lib
             public const string SQLSERVER = "SQL";
             public const string MYSQL = "MYSQL";
         }
+
+        public static class RelationDataColumns
+        {
+            public const string CHILDTABLE = "ChildTable";
+            public const string CHILDKEY = "ChildKey";
+            public const string PARENTTABLE = "ParentTable";
+            public const string PARENTKEY = "PARENTKEY";
+        }
     }
 }
