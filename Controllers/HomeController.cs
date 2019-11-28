@@ -33,11 +33,11 @@ namespace DataViewer.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public IActionResult AllTables()
-        //{
-        //    return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = dt.JQDTFriendlyColumnList() });
-        //}
+        [HttpGet]
+        public IActionResult AllTables()
+        {
+            return Json(_businessLayer.AllTables());
+        }
 
         [HttpGet]
         public IActionResult GetParentTables(TestViewModel model)

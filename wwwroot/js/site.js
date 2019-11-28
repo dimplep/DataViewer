@@ -4,8 +4,13 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
-
+    
+    var allTables = GetJsonAsync('/Home/AllTables', "", FillMainSelect);
 });
+
+function FillMainSelect(data, textStatus, xhr) {
+    FillSelect($('#mainTableSelect'), data);
+}
 
 function GetParentData() {
     var model = {
@@ -59,8 +64,48 @@ function FillJQTable(tableName, url, model) {
             );
         },
         error: function (error) {
-            alert('error');
-            alert(error.toString());
+            alert("ERROR: " + error);
         }
+    });
+}
+
+function GetJsonAsync(url, data, callback) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: data,
+        dataType: "json",
+        success: callback,
+        error: function (error) {
+            return "ERROR";
+        }
+    });
+}
+
+function GetJsonSync(url, data) {
+    var result;
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: data,
+        async: false,
+        dataType: "json",
+        success: function (jsonResult) {
+            result = jsonResult;
+        },
+        error: function (error) {
+            return "ERROR";
+        }
+    });
+
+    return result;
+}
+
+function FillSelect(selectObj, json) {
+    // fills select using json
+    $(selectObj).empty();
+    $.each(json, function (i, value) {
+        selectObj.append($('<option></option>').attr('value', value).text(value));
     });
 }

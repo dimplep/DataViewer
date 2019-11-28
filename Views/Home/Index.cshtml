@@ -3,53 +3,70 @@
 }
 
 <div class="container" style="padding:5px">
-    <h4>Current Table and Filters</h4>
-    <div class="row" style="padding:7px">
-        <div class="col-md-2">
-            <label for="currentTableSelect">Table: </label>
-            <select id="currentTableSelect">
-                <option value="table1" selected>Table 1</option>
-                <option value="table2">Table 2</option>
-            </select>
+        <h4>Main Table and Filters</h4>
+
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="fitwidth">
+                            <label for="mainTableSelect">Table: </label>
+                        </td>
+                        <td class="fitwidth">
+                            <select id="mainTableSelect" />
+                        </td>
+                        <td class="fitwidth">
+                            <label for="currentColumnSelect">Column: </label>
+                        </td>
+                        <td class="fitwidth">
+                            <select id="currentColumnSelect" />
+                        </td>
+                        <td class="fitwidth">
+                            <select id="currentOperatorSelect">
+                                <option value="=" selected>=</option>
+                                <option value=">"></option>
+                                <option value=">=">=</option>
+                                <option value="<"><</option>
+                                <option value="<="><=</option>
+                                <option value="<>"><></option>
+                                <option value="IsNull">Is Null</option>
+                                <option value="IsNotNull">Is Not Null</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" id="columnFilterText" class="form-control" />
+                        </td>
+                        <td align="right" class="fitwidth">
+                            <input type="button" id="AddFilterBtn" value="Add" class="btn-secondary" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="col-md-6">
-            <label for="currentColumnSelect">Column: </label>
-            <select id="currentColumnSelect">
-                <option value="col1" selected>Column 1</option>
-                <option value="col2">Column 2</option>
-            </select>
-            <select id="currentOperatorSelect">
-                <option value="=" selected>=</option>
-                <option value=">"></option>
-                <option value=">=">=</option>
-                <option value="<"><</option>
-                <option value="<="><=</option>
-                <option value="<>"><></option>
-                <option value="IsNull">Is Null</option>
-                <option value="IsNotNull">Is Not Null</option>
-            </select>
-            <input type="text" id="columnFilterText" />
-        </div>
-        <div class="col-md-4">
-            <input type="button" id="AddFilterBtn" value="Add" class="btn-secondary" />
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td class="fitwidth">
+                            <label for="filterCriteriaText">Criteria:</label>
+                        </td>
+                        <td>
+                            <textarea id="filterCriteriaText" class="form-control" rows="2" readonly></textarea>
+                        </td>
+                        <td class="fitwidth">
+                            <label for="topNText">Top: </label>
+                        </td>
+                        <td class="fitwidth">
+                            <input type="number" id="topNText" min="1" max="999" style="width:60px" value="100" />
+                        </td>
+                        <td align="right" class="fitwidth">
+                            <input type="button" id="ApplyFilterBtn" value="Apply" class="btn-primary" onclick="GetParentData();" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="row" style="padding:7px">
-        <div class="col-md-1">
-            <label for="filterCriteriaText">Criteria:</label>
-        </div>
-        <div class="col-md-8">
-            <textarea id="filterCriteriaText" style="width:inherit" rows="2" readonly></textarea>
-        </div>
-        <div class="col-md-2">
-            <label for="topNText">Top: </label>
-            <input type="number" id="topNText" min="1" max="999" style="width:60px" value="100" />
-        </div>
-        <div class="col-md-1" align="right">
-            <input type="button" id="ApplyFilterBtn" value="Apply" class="btn-primary" onclick="GetParentData();" />
-        </div>
-    </div>
-</div>
 
 <div class="container" style="padding:5px">
     <h4>Child Relations</h4>
