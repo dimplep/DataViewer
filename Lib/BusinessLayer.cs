@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Data;
 using static DataViewer.Lib.AppConst;
+using System.IO;
+using System.Text;
 
 namespace DataViewer.Lib
 {
@@ -14,11 +16,10 @@ namespace DataViewer.Lib
     {
         private IDataAccess _dataAccess;
         private DataTable _relations;
-
-        public BusinessLayer(IDataAccess dataAccess, DataTable relations)
+        public BusinessLayer(IDataAccess dataAccess, string relationsJsonFileName)
         {
             _dataAccess = dataAccess;
-            _relations = relations;
+            _relations = Relations.GetRelations(relationsJsonFileName);
         }
 
         public List<string> AllTables()
@@ -31,4 +32,25 @@ namespace DataViewer.Lib
             return list;
         }
     }
+
+    // static implementation of relations reading to avoid disk i/o
+    public class Relations
+    {
+        private static DataTable _relations = null;
+        private static readonly object lockobj = new object();
+
+        public static DataTable GetRelations(string relationsJsonFileName)
+        {
+            string relationsJson;
+            var fileStream = new FileStream(relationsJsonFileName, FileMode.Open, FileAccess.Read);
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8))
+            {
+                relationsJson = streamReader.ReadToEnd();
+            }
+
+            _relations = relationsJson.JsonToDatatable();
+            return _relations;
+        }
+    }
+
 }

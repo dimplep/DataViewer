@@ -17,7 +17,6 @@ namespace DataViewer.Controllers
     {
         IDataAccess _dataAccess;
         BusinessLayer _businessLayer;
-        DataTable _relations;
         public HomeController(IOptions<DateSettingOptions> op)
         {
             
@@ -25,13 +24,8 @@ namespace DataViewer.Controllers
             string dbms = op.Value.RDBMS;
             string relationsJsonFileName = op.Value.RelationsJsonFileName;
             
-            // this could have passed to controller as well
             _dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms);
-            _relations = Relations.GetRelations(relationsJsonFileName);
-            _businessLayer = new BusinessLayer(_dataAccess, _relations);
-
-            var allTables = _businessLayer.AllTables();
-            var allTables2 = _businessLayer.AllTables();
+            _businessLayer = new BusinessLayer(_dataAccess, relationsJsonFileName);
         }
 
         public IActionResult Index()
