@@ -1,5 +1,6 @@
 ﻿using DataViewer.Lib;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 
@@ -8,6 +9,7 @@ namespace DataViewer.Data
     public interface IDataAccess
     {
         DataTable GetData(string sql);
+        List<string> GetColumns(string table);
     }
 
     public class DataAccess : IDataAccess
@@ -19,8 +21,12 @@ namespace DataViewer.Data
             _connectionString = connectionString;
         }
 
+        public virtual List<string> GetColumns(string table)
+        {
+            throw new NotImplementedException();
+        }
 
-        // need to implement at child level
+
         public virtual DataTable GetData(string sql)
         {
             throw new NotImplementedException();

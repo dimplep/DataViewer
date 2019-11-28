@@ -1,32 +1,38 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿/* html component ids */
+var mainTableSelect = '#mainTableSelect';
+var columnSelect = '#columnSelect';
+var operatorSelect = '#operatorSelect';
 
-// Write your JavaScript code.
+
+/* MVC urls */
+var initialScreenDataUrl = '/Home/InitialScreenData';
 
 $(document).ready(function () {
-    
-    var allTables = GetJsonAsync('/Home/AllTables', "", FillMainSelect);
+
+    GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
+
 });
 
-function FillMainSelect(data, textStatus, xhr) {
-    FillSelect($('#mainTableSelect'), data);
+function SetupInitialScreen(data, textStatus, xhr) {
+    FillSelect($(mainTableSelect), data.allTables);
+    FillSelect($(columnSelect), data.columns);
+    FillSelect($(operatorSelect), data.operators);
 }
 
-function GetParentData() {
-    var model = {
-        Name: "James",
-        Location: "London"
-    };
+//function FillMainSelect(data, textStatus, xhr) {
+//    FillSelect($('#mainTableSelect'), data);
+//}
 
-    var tableName = '#parentDataTable';
-    var url = '/Home/GetParentTables';
+//function GetParentData() {
+//    var tableName = '#parentDataTable';
+//    var url = '/Home/GetParentTables';
 
-    // clear table header
-    ClearJQTableHeader(tableName);
+//    // clear table header
+//    ClearJQTableHeader(tableName);
 
-    //fill data table
-    FillJQTable(tableName, url, model);
-}
+//    //fill data table
+//    FillJQTable(tableName, url, model);
+//}
 
 function ClearJQTableHeader(tableName) {
     // clear datatable header row before fill again

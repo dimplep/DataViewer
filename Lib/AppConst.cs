@@ -21,10 +21,22 @@ namespace DataViewer.Lib
 
         public static class RelationDataColumns
         {
-            public const string CHILDTABLE = "ChildTable";
-            public const string CHILDKEY = "ChildKey";
-            public const string PARENTTABLE = "ParentTable";
-            public const string PARENTKEY = "PARENTKEY";
+            public const string CHILD_TABLE = "ChildTable";
+            public const string CHILD_KEY = "ChildKey";
+            public const string PARENT_TABLE = "ParentTable";
+            public const string PARENT_KEY = "PARENTKEY";
+        }
+
+        public static class Operators
+        {
+            public const string EQUAL = "=";
+            public const string GREATER_THAN = ">";
+            public const string GREATER_THAN_EQUAL = ">=";
+            public const string LESS_THAN = "<";
+            public const string LESS_THAN_EQUAL = "<=";
+            public const string NOT_EQUAL = "<>";
+            public const string IS_NULL = "Is Null";
+            public const string IS_NOT_NULL = "Is Not Null";
         }
     }
 }

@@ -59,6 +59,17 @@ namespace DataViewer.Lib
             return list;
         }
 
+        public static List<T> ColumnToList<T>(this DataTable dt, int colIndex)
+        {
+            List<T> data = new List<T>();
+            foreach (DataRow row in dt.Rows)
+            {
+                T item = row.Field<T>(colIndex);
+                data.Add(item);
+            }
+            return data;
+        }
+
         // returns data table from json
         public static DataTable JsonToDatatable(this String jsonString)
         {

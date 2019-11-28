@@ -34,9 +34,11 @@ namespace DataViewer.Controllers
         }
 
         [HttpGet]
-        public IActionResult AllTables()
+        public IActionResult InitialScreenData()
         {
-            return Json(_businessLayer.AllTables());
+            List<string> allTables = _businessLayer.AllTables();
+
+            return Json(new { allTables = allTables, operators = _businessLayer.FilterOperators(), columns = _businessLayer.Columns(allTables[0])});
         }
 
         [HttpGet]

@@ -25,12 +25,25 @@ namespace DataViewer.Lib
         public List<string> AllTables()
         {
             List<string> list = ((from row in _relations.AsEnumerable()
-                           select row.Field<string>(RelationDataColumns.PARENTTABLE))
+                           select row.Field<string>(RelationDataColumns.PARENT_TABLE))
                            .Union(from row in _relations.AsEnumerable()
-                                  select row.Field<string>(RelationDataColumns.CHILDTABLE))).Distinct().OrderBy(o => o).ToList();
+                                  select row.Field<string>(RelationDataColumns.CHILD_TABLE))).Distinct().OrderBy(o => o).ToList();
 
             return list;
         }
+
+        public List<string> FilterOperators()
+        {
+            return new List<string> { Operators.EQUAL, Operators.GREATER_THAN, Operators.GREATER_THAN_EQUAL, Operators.LESS_THAN, 
+                                    Operators.LESS_THAN_EQUAL, Operators.NOT_EQUAL, Operators.IS_NULL, Operators.IS_NOT_NULL};
+        }
+
+        public List<string> Columns(string table)
+        {
+            return _dataAccess.GetColumns(table);
+        }
+
+        
     }
 
     // static implementation of relations reading to avoid disk i/o
