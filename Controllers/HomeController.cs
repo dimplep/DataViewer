@@ -42,6 +42,12 @@ namespace DataViewer.Controllers
         }
 
         [HttpGet]
+        public IActionResult AddFilter(AddFilterViewModel addFilterViewModel)
+        {
+            return Json(_businessLayer.GetColumnFilterByType(addFilterViewModel));
+        }
+
+        [HttpGet]
         public IActionResult GetParentTables(TestViewModel model)
         {
             DataTable dt = _dataAccess.GetData("select top 100 * from Production.Location");

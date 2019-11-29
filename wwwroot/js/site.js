@@ -2,10 +2,12 @@
 var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
-
+var columnFilterText = '#columnFilterText';
+var filterCriteriaText = '#filterCriteriaText';
 
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
+var addFilterUrl = '/Home/AddFilter';
 
 $(document).ready(function () {
 
@@ -19,6 +21,19 @@ function SetupInitialScreen(data, textStatus, xhr) {
     FillSelect($(operatorSelect), data.operators);
 }
 
+function AddFilter() {
+    var newFilter = $(columnFilterText).val();
+    if ($(columnSelect).val() && $(operatorSelect).val() && newFilter) {
+
+        var data = { table: $(mainTableSelect).val(), column: $(columnSelect).val(), filterOperator: $(operatorSelect).val(), newFilter: newFilter, currentFilters: $(filterCriteriaText).val() };
+
+        var result = GetJsonSync(addFilterUrl, data);
+        $(filterCriteriaText).val(result);
+    }
+    else {
+        alert("Column/Operator/Filter not selected");
+    }
+}
 //function FillMainSelect(data, textStatus, xhr) {
 //    FillSelect($('#mainTableSelect'), data);
 //}

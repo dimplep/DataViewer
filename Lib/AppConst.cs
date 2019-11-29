@@ -37,6 +37,8 @@ namespace DataViewer.Lib
             public const string NOT_EQUAL = "<>";
             public const string IS_NULL = "Is Null";
             public const string IS_NOT_NULL = "Is Not Null";
+            public const string IN = "In";
+            public const string NOT_IN = "Not In";
         }
     }
 }

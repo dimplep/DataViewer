@@ -9,6 +9,7 @@ using System.Data;
 using static DataViewer.Lib.AppConst;
 using System.IO;
 using System.Text;
+using DataViewer.Models;
 
 namespace DataViewer.Lib
 {
@@ -35,7 +36,8 @@ namespace DataViewer.Lib
         public List<string> FilterOperators()
         {
             return new List<string> { Operators.EQUAL, Operators.GREATER_THAN, Operators.GREATER_THAN_EQUAL, Operators.LESS_THAN, 
-                                    Operators.LESS_THAN_EQUAL, Operators.NOT_EQUAL, Operators.IS_NULL, Operators.IS_NOT_NULL};
+                                    Operators.LESS_THAN_EQUAL, Operators.NOT_EQUAL, Operators.IS_NULL, Operators.IS_NOT_NULL,
+                                    Operators.IN, Operators.NOT_IN};
         }
 
         public List<string> Columns(string table)
@@ -43,7 +45,14 @@ namespace DataViewer.Lib
             return _dataAccess.GetColumns(table);
         }
 
-        
+        public string GetColumnFilterByType(AddFilterViewModel addFilterViewModel)
+        {
+            string newCondition = _dataAccess.GetColumnFilterByType(addFilterViewModel.table, addFilterViewModel.column, addFilterViewModel.filterOperator, addFilterViewModel.newFilter);
+            return addFilterViewModel.currentFilters + (addFilterViewModel.currentFilters.Trim() == "" ? "" : " AND ") + newCondition;
+        }
+
+
+
     }
 
     // static implementation of relations reading to avoid disk i/o
