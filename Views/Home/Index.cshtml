@@ -22,7 +22,7 @@
                             <select id="columnSelect" onchange="columnSelectionChanged(this.value);" />
                         </td>
                         <td class="fitwidth">
-                            <select id="operatorSelect">
+                            <select id="operatorSelect" onchange="SetColumnFilterTextDisabled(this.value);">
                                 <option value="=" selected>=</option>
                                 <option value=">"></option>
                                 <option value=">=">=</option>

@@ -9,6 +9,8 @@ const COLUMN_INFO_CATEGORY = "category";
 
 // Operators
 const OPERATOR_LIKE = "Like";
+const OPERATOR_IS_NULL = "Is Null";
+const OPERATOR_IS_NOT_NULL = "Is Not Null";
 
 var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
@@ -38,7 +40,14 @@ function SetupInitialScreen(data, textStatus, xhr) {
     FillSelect($(operatorSelect), data.operators);
 
     // set gui for first column
+    //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
+    columnSelectionChanged($(columnSelect).val());
+    
+    SetColumnFilterTextDisabled($(operatorSelect).val());
+}
 
+function OperatorChanged() {
+    SetColumnFilterTextDisabled($(operatorSelect).val());
 }
 
 function AddFilter() {
@@ -177,9 +186,8 @@ function SetupWhenColumnChanged(colName) {
     if (category !== COLUMN_CATEGORY_TEXT) {
         // remove 'like'
         RemoveArrayElement(newCopy, OPERATOR_LIKE);
-        FillSelect($(operatorSelect), newCopy);
     }
-
+    FillSelect($(operatorSelect), newCopy);
 }
 
 function RemoveArrayElement(array, element) {
@@ -187,4 +195,10 @@ function RemoveArrayElement(array, element) {
     if (index > -1) {
         array.splice(index, 1);
     }
+}
+
+function SetColumnFilterTextDisabled(selectedOperator) {
+    var shouldDisabled = selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL;
+    $(columnFilterText).val("");
+    $(columnFilterText).prop("disabled", shouldDisabled);
 }
