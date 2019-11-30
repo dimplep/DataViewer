@@ -40,7 +40,7 @@ namespace DataViewer.Lib
                                     Operators.IN, Operators.NOT_IN};
         }
 
-        public List<string> Columns(string table)
+        public List<ColumnInfo> GetColumns(string table)
         {
             return _dataAccess.GetColumns(table);
         }

@@ -11,7 +11,6 @@ namespace DataViewer.Lib
 {
     public static class ExtensionsLib
     {
-
         // Does jquery datatables friendly data conversion and creates a list
         public static List<dynamic> JQDTFriendlyTableData(this DataTable dt)
         {

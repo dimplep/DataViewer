@@ -40,5 +40,13 @@ namespace DataViewer.Lib
             public const string IN = "In";
             public const string NOT_IN = "Not In";
         }
+
+        public static class DataCategory
+        {
+            public const string TEXT = "text";      // text, str, char
+            public const string NUMERIC = "numeric";  // int, decimal, float, bit
+            public const string DATE = "date";      // date, datetime, time
+            public const string OTHER = "other";      // Any other column types than text, number, date should be excluded
+        }
     }
 }

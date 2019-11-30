@@ -38,7 +38,7 @@ namespace DataViewer.Controllers
         {
             List<string> allTables = _businessLayer.AllTables();
 
-            return Json(new { allTables = allTables, operators = _businessLayer.FilterOperators(), columns = _businessLayer.Columns(allTables[0])});
+            return Json(new { allTables = allTables, operators = _businessLayer.FilterOperators(), columns = _businessLayer.GetColumns(allTables[0])});
         }
 
         [HttpGet]
