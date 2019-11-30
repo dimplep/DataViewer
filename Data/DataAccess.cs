@@ -74,7 +74,7 @@ namespace DataViewer.Data
             {
                 string dataCategory = ColumnTypeToCategory(dt.Rows[i].Field<string>(1));
 
-                if (dataCategory != AppConst.DataCategory.OTHER)        // ignore other category columns
+                if (dataCategory != AppConst.Category.OTHER)        // ignore other category columns
                 {
                     columns.Add(new ColumnInfo(dt.Rows[i].Field<string>(0), dataCategory));
                 }
@@ -111,19 +111,19 @@ namespace DataViewer.Data
 
             if (TextCategoryKeywords.Exists(listElement => dataType.Contains(listElement)))
             {
-                dataCategory = AppConst.DataCategory.TEXT;
+                dataCategory = AppConst.Category.TEXT;
             }
             else if (NumericCategoryKeywords.Exists(listElement => dataType.Contains(listElement)))
             {
-                dataCategory = AppConst.DataCategory.NUMERIC;
+                dataCategory = AppConst.Category.NUMERIC;
             }
             else if (DateCategoryKeywords.Exists(listElement => dataType.Contains(listElement)))
             {
-                dataCategory = AppConst.DataCategory.DATE;
+                dataCategory = AppConst.Category.DATE;
             }
             else
             {
-                dataCategory = AppConst.DataCategory.OTHER;
+                dataCategory = AppConst.Category.OTHER;
             }
 
             return dataCategory;

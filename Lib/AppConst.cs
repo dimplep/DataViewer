@@ -39,9 +39,10 @@ namespace DataViewer.Lib
             public const string IS_NOT_NULL = "Is Not Null";
             public const string IN = "In";
             public const string NOT_IN = "Not In";
+            public const string LIKE = "Like";
         }
 
-        public static class DataCategory
+        public static class Category
         {
             public const string TEXT = "text";      // text, str, char
             public const string NUMERIC = "numeric";  // int, decimal, float, bit

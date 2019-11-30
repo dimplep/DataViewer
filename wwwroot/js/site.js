@@ -7,12 +7,18 @@ const COLUMN_CATEGORY_DATE = "date";      // date, datetime, time etc.
 const COLUMN_INFO_NAME = "name";
 const COLUMN_INFO_CATEGORY = "category";
 
+// Operators
+const OPERATOR_LIKE = "Like";
+
 var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
 var columnFilterText = '#columnFilterText';
 var filterCriteriaText = '#filterCriteriaText';
+
+// page global variables
 var columnInfoArr;     // create placeholder
+var allOperators;       // all possible operators
 
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
@@ -27,11 +33,11 @@ $(document).ready(function () {
 function SetupInitialScreen(data, textStatus, xhr) {
     FillSelect($(mainTableSelect), data.allTables);
     columnInfoArr = data.columns;
-    var test = SearchArray(columnInfoArr, "GroupName", COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
-    alert(test);
+    allOperators = data.operators;
     FillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
     FillSelect($(operatorSelect), data.operators);
 
+    // set gui for first column
 
 }
 
@@ -160,3 +166,25 @@ function SearchArray(arr, valueToSearch, searchProperty, returnProperty) {
     return foundElement;
 }
 
+function columnSelectionChanged(val) {
+    SetupWhenColumnChanged(val);
+}
+
+function SetupWhenColumnChanged(colName) {
+    // find data type
+    var category = SearchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+    var newCopy = JSON.parse(JSON.stringify(allOperators));
+    if (category !== COLUMN_CATEGORY_TEXT) {
+        // remove 'like'
+        RemoveArrayElement(newCopy, OPERATOR_LIKE);
+        FillSelect($(operatorSelect), newCopy);
+    }
+
+}
+
+function RemoveArrayElement(array, element) {
+    var index = array.indexOf(element);
+    if (index > -1) {
+        array.splice(index, 1);
+    }
+}

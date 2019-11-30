@@ -37,7 +37,7 @@ namespace DataViewer.Lib
         {
             return new List<string> { Operators.EQUAL, Operators.GREATER_THAN, Operators.GREATER_THAN_EQUAL, Operators.LESS_THAN, 
                                     Operators.LESS_THAN_EQUAL, Operators.NOT_EQUAL, Operators.IS_NULL, Operators.IS_NOT_NULL,
-                                    Operators.IN, Operators.NOT_IN};
+                                    Operators.IN, Operators.NOT_IN, Operators.LIKE};
         }
 
         public List<ColumnInfo> GetColumns(string table)
