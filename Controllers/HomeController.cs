@@ -56,7 +56,7 @@ namespace DataViewer.Controllers
         [HttpGet]
         public IActionResult MainTableDataFetch(MainTableDataFetchModel model)
         {
-            DataTable dt = _dataAccess.GetData("select top 100 * from Production.Location");
+            DataTable dt = _businessLayer.GetTableCriteriaData(model.table, model.criteria, model.topN);
 
             //dt.Columns.Add("Person Name", typeof(string));
             //dt.Columns.Add("Age", typeof(int));

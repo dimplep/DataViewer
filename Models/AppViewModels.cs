@@ -8,7 +8,18 @@ namespace DataViewer.Models
     public class MainTableDataFetchModel
     {
         public string table { set; get; }
-        public string criteria { set; get; }
+        private string _criteria;
+        public string criteria 
+        { 
+            set
+            {
+                _criteria = (value == null ? "" : value.Trim());
+            }
+            get
+            {
+                return _criteria;
+            }
+        }
         public int topN { set; get; }
     }
 }

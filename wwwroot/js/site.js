@@ -24,8 +24,8 @@ var topNText = "topNText";
 
 // jquery datatables
 var mainDataTable = "#mainDataTable";
-var childDataTable = "childDataTable";
-var parentDataTable = "parentDataTable";
+var childDataTable = "#childDataTable";
+var parentDataTable = "#parentDataTable";
 
 var category;
 
@@ -143,8 +143,8 @@ function tableChanged(newTable) {
 // get main table data using main table and filter criteria
 function GetMainTableData() {
     var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
-    ClearJQTableHeader(mainDataTable);
-    FillJQTable(mainDataTable, mainTableDataGetUrl, model);
+    ClearJQTableHeader(parentDataTable);
+    FillJQTable(parentDataTable, mainTableDataGetUrl, model);
 }
 
 function ClearJQTableHeader(tableName) {

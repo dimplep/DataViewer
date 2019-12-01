@@ -11,6 +11,25 @@ namespace DataViewer.Lib
 {
     public static class ExtensionsLib
     {
+        // returns count of Occurances
+        public static int Occurance(this string str, string value)
+        {
+            int occurances = 0;
+            int index = 0;
+            if (!String.IsNullOrEmpty(value))
+            {
+                while (index >= 0)
+                {
+                    index = str.IndexOf(value, index);
+                    if (index >= 0)
+                    {
+                        occurances++;
+                        index += value.Length;
+                    }
+                }
+            }
+            return occurances;
+        }
         // Does jquery datatables friendly data conversion and creates a list
         public static List<dynamic> JQDTFriendlyTableData(this DataTable dt)
         {

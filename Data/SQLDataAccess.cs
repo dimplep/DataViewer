@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using DataViewer.Lib;
 using static DataViewer.Lib.AppConst;
+using Microsoft.SqlServer.Types;
 
 namespace DataViewer.Data
 {
@@ -42,6 +43,7 @@ namespace DataViewer.Data
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 // this will query your database and return the result to your datatable
                 da.Fill(dt);
+                cmd.Dispose();
                 conn.Close();
                 da.Dispose();
             }

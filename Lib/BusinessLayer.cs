@@ -47,13 +47,13 @@ namespace DataViewer.Lib
 
         public DataTable GetTableCriteriaData(string table, string criteria, int topN)
         {
-            if (criteria.Contains(" FROM "))
+            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " * FROM " + table + (criteria != "" ? " WHERE " + criteria : "");
+            
+            if (sql.Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').ToLower().Occurance(" from ") > 1)
             {
-                throw new Exception("Invalid Criteria");        // poor mans sql injection prevention
+                throw new Exception("Invalid SQL");     // poor man's sql injection prevention
             }
 
-            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " FROM " + table + (criteria.Trim() != "" ? "WHERE " + criteria : "");
-            
             return _dataAccess.GetData(sql);
         }
 
