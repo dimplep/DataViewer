@@ -13,7 +13,7 @@
                             <label for="mainTableSelect">Table: </label>
                         </td>
                         <td class="fitwidth">
-                            <select id="mainTableSelect" />
+                            <select id="mainTableSelect" onchange="tableChanged(this.value);"/>
                         </td>
                         <td class="fitwidth">
                             <label for="columnSelect">Column: </label>
@@ -48,10 +48,10 @@
                 <tbody>
                     <tr>
                         <td class="fitwidth">
-                            <label for="filterCriteriaText">Criteria:</label>
+                            <label for="filterCriteriaTextArea">Criteria:</label>
                         </td>
                         <td>
-                            <textarea id="filterCriteriaText" class="form-control" rows="2"></textarea>
+                            <textarea id="filterCriteriaTextArea" class="form-control" rows="2"></textarea>
                         </td>
                         <td class="fitwidth">
                             <label for="topNText">Top: </label>

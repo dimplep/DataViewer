@@ -9,6 +9,8 @@ const COLUMN_INFO_CATEGORY = "category";
 
 // Operators
 const OPERATOR_LIKE = "Like";
+const OPERATOR_IN = "In";
+const OPERATOR_NOT_IN = "Not In";
 const OPERATOR_IS_NULL = "Is Null";
 const OPERATOR_IS_NOT_NULL = "Is Not Null";
 
@@ -16,7 +18,8 @@ var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
 var columnFilterText = '#columnFilterText';
-var filterCriteriaText = '#filterCriteriaText';
+var filterCriteriaTextArea = '#filterCriteriaTextArea';
+var category;
 
 // page global variables
 var columnInfoArr;     // create placeholder
@@ -24,7 +27,7 @@ var allOperators;       // all possible operators
 
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
-var addFilterUrl = '/Home/AddFilter';
+var getColumnsUrl = "/Home/GetColumns";
 
 $(document).ready(function () {
 
@@ -42,26 +45,76 @@ function SetupInitialScreen(data, textStatus, xhr) {
     // set gui for first column
     //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
     columnSelectionChanged($(columnSelect).val());
-    
-    SetColumnFilterTextDisabled($(operatorSelect).val());
 }
 
 function OperatorChanged() {
     SetColumnFilterTextDisabled($(operatorSelect).val());
 }
 
+function ToSQLInCompatible(value, isNumeric) {
+    // converts comma delimited to IN comatible
+    // e.g. for numeric 4,7,9 it should return (4,7,9). For text value jack,larry,ken it should return ('jack','larry','ken')
+    var arr = value.split(',');
+    var result = "";
+    var currentVal = "";
+    $.each(arr, function (i, element) {
+        currentVal = (isNumeric ? element.trim() : "'" + element.trim() + "'");
+        result = result + (result === "" ? "" : ",") + currentVal;
+    });
+    return "(" + result + ")";
+}
 function AddFilter() {
-    var newFilter = $(columnFilterText).val();
-    if ($(columnSelect).val() && $(operatorSelect).val() && newFilter) {
+    var newFilter = "";
+    var filterCriteria = $(filterCriteriaTextArea).val();
+    var selectedOperator = $(operatorSelect).val();
+    var filterText = $(columnFilterText).val();
 
-        var data = { table: $(mainTableSelect).val(), column: $(columnSelect).val(), filterOperator: $(operatorSelect).val(), newFilter: newFilter, currentFilters: $(filterCriteriaText).val() };
-
-        var result = GetJsonSync(addFilterUrl, data);
-        $(filterCriteriaText).val(result);
+    if (selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL) {
+        newFilter = $(columnSelect).val() + " " + selectedOperator;
+    } else if (selectedOperator === OPERATOR_IN || selectedOperator === OPERATOR_NOT_IN) {
+        filterText = ToSQLInCompatible(filterText, category === COLUMN_CATEGORY_NUMERIC);
+        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
+    } else if (selectedOperator === OPERATOR_LIKE) {
+        if (filterText.indexOf("%") < 0) {
+            filterText = filterText + "%";   // add % if user did not entered, otherwise leave it alone
+        }
+        filterText = "'" + filterText + "'";
+        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
     }
     else {
-        alert("Column/Operator/Filter not selected");
+        if (category !== COLUMN_CATEGORY_NUMERIC) {
+            filterText = "'" + filterText + "'";
+        }
+        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
     }
+    
+    filterCriteria = filterCriteria + (filterCriteria === "" ? "" : " AND ") + newFilter;
+    $(filterCriteriaTextArea).val(filterCriteria);
+}
+
+//function AddFilter() {
+//    var newFilter = $(columnFilterText).val();
+//    if ($(columnSelect).val() && $(operatorSelect).val() && newFilter) {
+
+//        var data = { table: $(mainTableSelect).val(), column: $(columnSelect).val(), filterOperator: $(operatorSelect).val(), newFilter: newFilter, currentFilters: $(filterCriteriaText).val() };
+
+//        var result = GetJsonSync(addFilterUrl, data);
+//        $(filterCriteriaText).val(result);
+//    }
+//    else {
+//        alert("Column/Operator/Filter not selected");
+//    }
+//}
+
+
+function tableChanged(newTable) {
+    var data = { table: $(mainTableSelect).val() };
+    var result = GetJsonSync(getColumnsUrl, data);
+    columnInfoArr = result.columns;
+    FillSelectByProperty($(columnSelect), columnInfoArr, COLUMN_INFO_NAME);
+    columnSelectionChanged($(columnSelect).val());
+    //$(filterCriteriaTextArea).val("");
+
 }
 //function FillMainSelect(data, textStatus, xhr) {
 //    FillSelect($('#mainTableSelect'), data);
@@ -177,11 +230,12 @@ function SearchArray(arr, valueToSearch, searchProperty, returnProperty) {
 
 function columnSelectionChanged(val) {
     SetupWhenColumnChanged(val);
+    SetColumnFilterTextDisabled($(operatorSelect).val());
 }
 
 function SetupWhenColumnChanged(colName) {
     // find data type
-    var category = SearchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+    category = SearchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
     var newCopy = JSON.parse(JSON.stringify(allOperators));
     if (category !== COLUMN_CATEGORY_TEXT) {
         // remove 'like'

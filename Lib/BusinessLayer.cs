@@ -45,13 +45,6 @@ namespace DataViewer.Lib
             return _dataAccess.GetColumns(table);
         }
 
-        public string GetColumnFilterByType(AddFilterViewModel addFilterViewModel)
-        {
-            string newCondition = _dataAccess.GetColumnFilterByType(addFilterViewModel.table, addFilterViewModel.column, addFilterViewModel.filterOperator, addFilterViewModel.newFilter);
-            return addFilterViewModel.currentFilters + (addFilterViewModel.currentFilters.Trim() == "" ? "" : " AND ") + newCondition;
-        }
-
-
 
     }
 

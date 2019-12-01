@@ -42,10 +42,16 @@ namespace DataViewer.Controllers
         }
 
         [HttpGet]
-        public IActionResult AddFilter(AddFilterViewModel addFilterViewModel)
+        public IActionResult GetColumns(string table)
         {
-            return Json(_businessLayer.GetColumnFilterByType(addFilterViewModel));
+            return Json(new { columns = _businessLayer.GetColumns(table) });
         }
+
+        //[HttpGet]
+        //public IActionResult AddFilter(AddFilterViewModel addFilterViewModel)
+        //{
+        //    return Json(_businessLayer.GetColumnFilterByType(addFilterViewModel));
+        //}
 
         [HttpGet]
         public IActionResult GetParentTables(TestViewModel model)

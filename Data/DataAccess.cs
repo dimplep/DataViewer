@@ -11,7 +11,6 @@ namespace DataViewer.Data
         DataTable GetData(string sql);
         List<ColumnInfo> GetColumns(string table);
 
-        string GetColumnFilterByType(string table, string column, string filterOperator, string value);
     }
 
     public class DataAccess : IDataAccess
@@ -92,12 +91,6 @@ namespace DataViewer.Data
                 table = table.Substring(table.IndexOf(".") + 1);
             }
             return table;
-        }
-
-
-        public virtual string GetColumnFilterByType(string table, string column, string filterOperator, string value)
-        {
-            throw new NotImplementedException();
         }
 
         public virtual DataTable GetData(string sql)
