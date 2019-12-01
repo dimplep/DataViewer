@@ -54,7 +54,7 @@ namespace DataViewer.Controllers
         //}
 
         [HttpGet]
-        public IActionResult GetParentTables(TestViewModel model)
+        public IActionResult MainTableDataFetch(MainTableDataFetchModel model)
         {
             DataTable dt = _dataAccess.GetData("select top 100 * from Production.Location");
 

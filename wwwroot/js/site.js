@@ -14,11 +14,19 @@ const OPERATOR_NOT_IN = "Not In";
 const OPERATOR_IS_NULL = "Is Null";
 const OPERATOR_IS_NOT_NULL = "Is Not Null";
 
+// UI elements
 var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
 var columnFilterText = '#columnFilterText';
 var filterCriteriaTextArea = '#filterCriteriaTextArea';
+var topNText = "topNText";
+
+// jquery datatables
+var mainDataTable = "#mainDataTable";
+var childDataTable = "childDataTable";
+var parentDataTable = "parentDataTable";
+
 var category;
 
 // page global variables
@@ -28,6 +36,7 @@ var allOperators;       // all possible operators
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
+var mainTableDataGetUrl = "/Home/MainTableDataFetch";
 
 $(document).ready(function () {
 
@@ -130,6 +139,13 @@ function tableChanged(newTable) {
 //    //fill data table
 //    FillJQTable(tableName, url, model);
 //}
+
+// get main table data using main table and filter criteria
+function GetMainTableData() {
+    var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
+    ClearJQTableHeader(mainDataTable);
+    FillJQTable(mainDataTable, mainTableDataGetUrl, model);
+}
 
 function ClearJQTableHeader(tableName) {
     // clear datatable header row before fill again

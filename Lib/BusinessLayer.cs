@@ -45,6 +45,18 @@ namespace DataViewer.Lib
             return _dataAccess.GetColumns(table);
         }
 
+        public DataTable GetTableCriteriaData(string table, string criteria, int topN)
+        {
+            if (criteria.Contains(" FROM "))
+            {
+                throw new Exception("Invalid Criteria");        // poor mans sql injection prevention
+            }
+
+            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " FROM " + table + (criteria.Trim() != "" ? "WHERE " + criteria : "");
+            
+            return _dataAccess.GetData(sql);
+        }
+
 
     }
 

@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace DataViewer.Models
 {
-    public class TestViewModel
+    public class MainTableDataFetchModel
     {
-        public string Name { set; get; }
-        public string Location { set; get; }
+        public string table { set; get; }
+        public string criteria { set; get; }
+        public int topN { set; get; }
     }
 }
