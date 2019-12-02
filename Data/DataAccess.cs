@@ -10,7 +10,6 @@ namespace DataViewer.Data
     {
         DataTable GetData(string sql);
         List<ColumnInfo> GetColumns(string table);
-
     }
 
     public class DataAccess : IDataAccess
@@ -21,7 +20,7 @@ namespace DataViewer.Data
         {
             get
             {
-                return new List<string> { "text", "char" };
+                return new List<string> { "text", "char", "uniqueidentifier" };
             }
         }
 
@@ -59,6 +58,7 @@ namespace DataViewer.Data
             throw new NotImplementedException();
         }
 
+        // backend dependent
 
         public virtual List<ColumnInfo> GetColumns(string schemaTable)
         {
@@ -73,7 +73,7 @@ namespace DataViewer.Data
             {
                 string dataCategory = ColumnTypeToCategory(dt.Rows[i].Field<string>(1));
 
-                if (dataCategory != AppConst.Category.OTHER)        // ignore other category columns
+                if (dataCategory != AppConst.Category.OTHER)
                 {
                     columns.Add(new ColumnInfo(dt.Rows[i].Field<string>(0), dataCategory));
                 }

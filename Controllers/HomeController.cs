@@ -57,7 +57,7 @@ namespace DataViewer.Controllers
         public IActionResult MainTableDataFetch(MainTableDataFetchModel model)
         {
             DataTable dt = _businessLayer.GetTableCriteriaData(model.table, model.criteria, model.topN);
-
+            
             //dt.Columns.Add("Person Name", typeof(string));
             //dt.Columns.Add("Age", typeof(int));
             //dt.Columns.Add("Date Hire", typeof(DateTime));

@@ -45,9 +45,22 @@ namespace DataViewer.Lib
             return _dataAccess.GetColumns(table);
         }
 
+        // gives list of html/json compatible comma delimited columns
+        public string CompatibleColumnsForSelect(string table)
+        {
+            string columns = "";
+            foreach(ColumnInfo item in  GetColumns(table))
+            {
+                columns += (columns != "" ? ", " : "") + item.name;
+            }
+            return columns;
+        }
+
         public DataTable GetTableCriteriaData(string table, string criteria, int topN)
         {
-            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " * FROM " + table + (criteria != "" ? " WHERE " + criteria : "");
+            List<ColumnInfo> cols = GetColumns(table);
+
+            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " " + CompatibleColumnsForSelect(table)  + " FROM " + table + (criteria != "" ? " WHERE " + criteria : "");
             
             if (sql.Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').ToLower().Occurance(" from ") > 1)
             {
