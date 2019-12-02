@@ -23,9 +23,9 @@ var filterCriteriaTextArea = '#filterCriteriaTextArea';
 var topNText = "topNText";
 
 // jquery datatables
-var mainDataTable = "#mainDataTable";
-var childDataTable = "#childDataTable";
-var parentDataTable = "#parentDataTable";
+var mainDataTableId = "#mainDataTable";
+var childDataTableId = "#childDataTable";
+var parentDataTableId = "#parentDataTable";
 
 var category;
 
@@ -41,7 +41,6 @@ var mainTableDataGetUrl = "/Home/MainTableDataFetch";
 $(document).ready(function () {
 
     GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
-
 });
 
 function SetupInitialScreen(data, textStatus, xhr) {
@@ -143,8 +142,8 @@ function tableChanged(newTable) {
 // get main table data using main table and filter criteria
 function GetMainTableData() {
     var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
-    ClearJQTableHeader(parentDataTable);
-    FillJQTable(parentDataTable, mainTableDataGetUrl, model);
+    ClearJQTableHeader(mainDataTableId);
+    FillJQTable(mainDataTableId, mainTableDataGetUrl, model);
 }
 
 function ClearJQTableHeader(tableName) {
@@ -153,12 +152,26 @@ function ClearJQTableHeader(tableName) {
 
     var table;
     if ($.fn.dataTable.isDataTable(tableName)) {
-
         table = $(tableName).DataTable();
         table.destroy();
         $(tableName).find("thead").find("tr").empty();
+        $(tableName).find("tbody").empty();
     }
 }
+
+// NOT WORKING
+function SetRowSelectEvent(tableName, table) {
+    $(tableName + ' tbody').on('click', 'tr', function () {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+}
+
 
 // fill jQuery datatable using passed table name, url and model
 function FillJQTable(tableName, url, model) {

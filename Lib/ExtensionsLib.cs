@@ -46,7 +46,14 @@ namespace DataViewer.Lib
                     switch (Type.GetTypeCode(column.DataType))
                     {
                         case TypeCode.DateTime:
-                            dict[column.ColumnName] = row.Field<DateTime>(column).ToString("G");
+                            if (row[column] != DBNull.Value)
+                            {
+                                dict[column.ColumnName] = row.Field<DateTime>(column).ToString("G");
+                            }
+                            else
+                            {
+                                dict[column.ColumnName] = "";
+                            }
                             break;
                         default:
                             dict[column.ColumnName] = row[column];
