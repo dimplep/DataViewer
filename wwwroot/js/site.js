@@ -42,10 +42,10 @@ $(document).ready(function () {
 
     GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
 
-    //$(document).on("click", "tr[role='row']", function () {
-    //    //alert($(this).children('td:first-child').text());
+    $(document).on("click", "tr[role='row']", function () {
+        alert($(this).children('td:first-child').text());
     //    $(this).toggleClass('selected');
-    //});
+    });
 
     //$(tableName + ' tbody').on('click', 'tr', function () {
     //    $(this).toggleClass('selected');
