@@ -41,6 +41,16 @@ var mainTableDataGetUrl = "/Home/MainTableDataFetch";
 $(document).ready(function () {
 
     GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
+
+    //$(document).on("click", "tr[role='row']", function () {
+    //    //alert($(this).children('td:first-child').text());
+    //    $(this).toggleClass('selected');
+    //});
+
+    //$(tableName + ' tbody').on('click', 'tr', function () {
+    //    $(this).toggleClass('selected');
+    //});
+
 });
 
 function SetupInitialScreen(data, textStatus, xhr) {
@@ -95,7 +105,7 @@ function AddFilter() {
         }
         newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
     }
-    
+
     filterCriteria = filterCriteria + (filterCriteria === "" ? "" : " AND ") + newFilter;
     $(filterCriteriaTextArea).val(filterCriteria);
 }
@@ -157,6 +167,12 @@ function ClearJQTableHeader(tableName) {
         $(tableName).find("thead").find("tr").empty();
         $(tableName).find("tbody").empty();
     }
+    else {
+        $(tableName).on("click", "tr[role='row']", function () {
+            //alert($(this).children('td:first-child').text());
+            $(this).toggleClass('selected');
+        });
+    }
 }
 
 // NOT WORKING
@@ -192,6 +208,12 @@ function FillJQTable(tableName, url, model) {
                 {
                     "data": result.data,
                     "columns": result.columns
+                    //,
+                    //"initComplete": function () {
+                    //    $(document).on("click", "tr[role='row']", function () {
+                    //        alert($(this).children('td:first-child').text());
+                    //    });
+                    //}
                 }
             );
         },
