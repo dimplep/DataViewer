@@ -119,11 +119,13 @@ namespace DataViewer.Lib
         public string data { get; set; }
         public string name { get; set; }
         public string className { get; set; }
+        public bool isPrimary { get; set; }
         public JQDTFriendlyColumnInfo(string colName, string colAlignment = AppConst.JQDT_COL_ALIGN.LEFT)
         {
             data = colName;
             name = colName;
             className = colAlignment;
+            this.isPrimary = false;
         }
     }
 

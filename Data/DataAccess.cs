@@ -48,6 +48,14 @@ namespace DataViewer.Data
             }
         }
 
+        public virtual string PrimaryKeysSql
+        {
+            get
+            {
+                return "";
+            }
+        }
+
         public DataAccess(string connectionString)
         {
             _connectionString = connectionString;
@@ -66,8 +74,10 @@ namespace DataViewer.Data
             string table = JustTableName(schemaTable);
 
             string sql = String.Format(ColumnsAndTypesSql, table);
+            string sql2 = String.Format(PrimaryKeysSql, table);
 
             DataTable dt = SqlToDataTable(sql);
+            List<string> pkCols = SqlToDataTable(sql2).ColumnToList<string>(0);  // get pk columns to list
             List<ColumnInfo> columns = new List<ColumnInfo>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -75,7 +85,7 @@ namespace DataViewer.Data
 
                 if (dataCategory != AppConst.Category.OTHER)
                 {
-                    columns.Add(new ColumnInfo(dt.Rows[i].Field<string>(0), dataCategory));
+                    columns.Add(new ColumnInfo(dt.Rows[i].Field<string>(0), dataCategory, pkCols.Contains(dt.Rows[i].Field<string>(0))));
                 }
             }
 
@@ -146,11 +156,13 @@ namespace DataViewer.Data
     public class ColumnInfo
     {
         public string name { get; set; }
+        public bool isPrimaryKey { get; set; }
         public string category { get; set; }       // basic category/group of data (e.g. text, date, number, logical)
-        public ColumnInfo(string name, string category)
+        public ColumnInfo(string name, string category, bool isPrimaryKey)
         {
             this.name = name;
             this.category = category;
+            this.isPrimaryKey = isPrimaryKey;
         }
     }
 }

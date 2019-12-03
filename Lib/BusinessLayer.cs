@@ -56,9 +56,11 @@ namespace DataViewer.Lib
             return columns;
         }
 
-        public DataTable GetTableCriteriaData(string table, string criteria, int topN)
+        public DataTable GetTableCriteriaData(string table, string criteria, int topN, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
         {
-            List<ColumnInfo> cols = GetColumns(table);
+            // columnsForFrontEnd is filled by refernce
+            //columns = dt.JQDTFriendlyColumnList();
+            //List<ColumnInfo> cols = GetColumns(table);
 
             string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " " + CompatibleColumnsForSelect(table)  + " FROM " + table + (criteria != "" ? " WHERE " + criteria : "");
             
@@ -67,7 +69,18 @@ namespace DataViewer.Lib
                 throw new Exception("Invalid SQL");     // poor man's sql injection prevention
             }
 
-            return _dataAccess.GetData(sql);
+            DataTable dt = _dataAccess.GetData(sql);
+            columnsForFrontEnd = dt.JQDTFriendlyColumnList();
+
+            // set primary key columns in columnsForFrontEnd
+            List<ColumnInfo> dbCols = _dataAccess.GetColumns(table);
+            foreach (ColumnInfo col in dbCols.Where(o => o.isPrimaryKey))
+            {
+                var match = columnsForFrontEnd.First(o => o.name == col.name);
+                match.isPrimary = true;
+            }
+
+            return dt;
         }
 
 

@@ -19,6 +19,23 @@ namespace DataViewer.Data
             }
         }
 
+        public override string PrimaryKeysSql
+
+        {
+            get
+            {
+                // , Col.DATA_TYPE 
+                return "SELECT Col.COLUMN_NAME " +
+                    "from INFORMATION_SCHEMA.TABLE_CONSTRAINTS Tab " +
+                    "inner join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE Usage " +
+                    "on Usage.CONSTRAINT_NAME = Tab.CONSTRAINT_NAME " +
+                    "inner join INFORMATION_SCHEMA.COLUMNS Col " +
+                    "on Usage.TABLE_NAME = Col.TABLE_NAME AND Usage.COLUMN_NAME = Col.COLUMN_NAME " +
+                    "WHERE CONSTRAINT_TYPE = 'PRIMARY KEY' " +
+                    "AND Col.TABLE_NAME = '{0}' ";
+            }
+        }
+
 
         //private string columnDataTypeSql = "SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '{0}' AND COLUMN_NAME = '{1}'";
 
