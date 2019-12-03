@@ -11,6 +11,7 @@ namespace DataViewer.Lib
 {
     public static class ExtensionsLib
     {
+        //
         // returns count of Occurances
         public static int Occurance(this string str, string value)
         {
