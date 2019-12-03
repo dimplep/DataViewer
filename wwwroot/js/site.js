@@ -44,7 +44,7 @@ $(document).ready(function () {
 
     $(document).on("click", "tr[role='row']", function (e) {
 
-        if (e.currentTarget._DT_RowIndex !== 'undefined') {
+        if (e.currentTarget._DT_RowIndex) {
             alert("Selected row index " + e.currentTarget._DT_RowIndex + " first column value : " + $(this).children('td:first-child').text());
         }
     //    $(this).toggleClass('selected');
