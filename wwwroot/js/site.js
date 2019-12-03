@@ -207,7 +207,8 @@ function FillJQTable(tableName, url, model) {
             $(tableName).DataTable(
                 {
                     "data": result.data,
-                    "columns": result.columns
+                    "columns": result.columns,
+                    select: true
                     //,
                     //"initComplete": function () {
                     //    $(document).on("click", "tr[role='row']", function () {
