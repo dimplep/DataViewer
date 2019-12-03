@@ -42,8 +42,11 @@ $(document).ready(function () {
 
     GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
 
-    $(document).on("click", "tr[role='row']", function () {
-        alert($(this).children('td:first-child').text());
+    $(document).on("click", "tr[role='row']", function (e) {
+
+        if (e.currentTarget._DT_RowIndex !== 'undefined') {
+            alert("Selected row index " + e.currentTarget._DT_RowIndex + " first column value : " + $(this).children('td:first-child').text());
+        }
     //    $(this).toggleClass('selected');
     });
 
