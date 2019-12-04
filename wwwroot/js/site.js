@@ -32,21 +32,48 @@ var category;
 // page global variables
 var columnInfoArr;     // create placeholder
 var allOperators;       // all possible operators
+var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
+var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
 var mainTableDataGetUrl = "/Home/MainTableDataFetch";
+var mainTableRowSelectUrl = "/Home/MainTableRowSelect";
 
 $(document).ready(function () {
 
     GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
 
     $(document).on("click", "tr[role='row']", function (e) {
-
-        if (e.currentTarget._DT_RowIndex) {
-            alert("Selected row index " + e.currentTarget._DT_RowIndex + " first column value : " + $(this).children('td:first-child').text());
+        if (typeof e.currentTarget._DT_RowIndex === 'undefined' || e.currentTarget._DT_RowIndex === null) {
+            return;
         }
+        //if (e.currentTarget._DT_RowIndex != null) {
+        var tableId = '#' + $(this).closest('table').attr('id');
+
+        if (tableId === mainDataTableId) {
+            // loop through columns, find primary key values and create json
+
+            var indexOfArr = jqDtNameArr.indexOf(tableId);
+            var colArr = jqDtColArr[indexOfArr];
+            var modelStr = "[";
+
+            for (var ii = 0; ii < colArr.length; ii++) {
+                if (colArr[ii].isPrimary) {
+                    modelStr = modelStr + (modelStr === "[" ? "" : ",") + '{ "name": "' + colArr[ii].name + '", "value": "' + $(this)[0].cells[ii].textContent + '" }';
+                }
+            }
+            modelStr = modelStr + "]";
+
+            // this line is for testing only, should replace with code to fill parent child tables related data
+            FillJQTable(childDataTableId, mainTableRowSelectUrl, model = { list: JSON.parse(modelStr) });
+        }
+
+
+
+        alert("Selected row index " + e.currentTarget._DT_RowIndex + " first column value : " + $(this).children('td:first-child').text());
+        //}
     //    $(this).toggleClass('selected');
     });
 
@@ -178,20 +205,6 @@ function ClearJQTableHeader(tableName) {
     }
 }
 
-// NOT WORKING
-function SetRowSelectEvent(tableName, table) {
-    $(tableName + ' tbody').on('click', 'tr', function () {
-        if ($(this).hasClass('selected')) {
-            $(this).removeClass('selected');
-        }
-        else {
-            table.$('tr.selected').removeClass('selected');
-            $(this).addClass('selected');
-        }
-    });
-}
-
-
 // fill jQuery datatable using passed table name, url and model
 function FillJQTable(tableName, url, model) {
     $.ajax({
@@ -201,6 +214,9 @@ function FillJQTable(tableName, url, model) {
         dataType: "json",
         success: function (result) {
             var str;
+
+            var indexOfArr = jqDtNameArr.indexOf(tableName);
+            jqDtColArr[indexOfArr] = result.columns;
 
             $.each(result.columns, function (k, colObj) {
                 str = '<th>' + colObj.name + '</th>';

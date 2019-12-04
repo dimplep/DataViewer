@@ -22,4 +22,16 @@ namespace DataViewer.Models
         }
         public int topN { set; get; }
     }
+
+    public class TestModel
+    {
+        public List<PrimaryKeyModel> list;
+    }
+    public class PrimaryKeyModel
+    {
+        public string name { set; get; }
+        public string value { set; get; }
+
+    }
+
 }

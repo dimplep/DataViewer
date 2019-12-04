@@ -72,6 +72,15 @@ namespace DataViewer.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult MainTableRowSelect(List<PrimaryKeyModel> list)
+        {
+
+            return Json(new { });
+            //return Json(new { recordsFiltered = 1, recordsTotal = 1, data = list.ToArray() });
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
