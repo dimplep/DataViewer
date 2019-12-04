@@ -57,17 +57,27 @@ $(document).ready(function () {
 
             var indexOfArr = jqDtNameArr.indexOf(tableId);
             var colArr = jqDtColArr[indexOfArr];
-            var modelStr = "[";
+            //var data = [];
 
-            for (var ii = 0; ii < colArr.length; ii++) {
-                if (colArr[ii].isPrimary) {
-                    modelStr = modelStr + (modelStr === "[" ? "" : ",") + '{ "name": "' + colArr[ii].name + '", "value": "' + $(this)[0].cells[ii].textContent + '" }';
-                }
-            }
-            modelStr = modelStr + "]";
+            //for (var ii = 0; ii < colArr.length; ii++) {
+            //    if (colArr[ii].isPrimary) {
+            //        data.push({
+            //            key: colArr[ii].name,
+            //            value: $(this)[0].cells[ii].textContent
+            //        });
+            //    }
+            //}
+
+            var data = [];
+            var elem = {
+                something1: 'my name',
+                something2: 'a value'
+            };
+            data.push(elem);
 
             // this line is for testing only, should replace with code to fill parent child tables related data
-            FillJQTable(childDataTableId, mainTableRowSelectUrl, model = { list: JSON.parse(modelStr) });
+            //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
+            PostJsonSync(mainTableRowSelectUrl, JSON.stringify(data));
         }
 
 
@@ -254,6 +264,27 @@ function GetJsonAsync(url, data, callback) {
             return "ERROR";
         }
     });
+}
+
+function PostJsonSync(url, model) {
+    var result;
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: model,
+        async: false,
+        dataType: 'json',
+        contentType: "application/json;charset=utf-8",
+        success: function (jsonResult) {
+            result = jsonResult;
+        },
+        error: function (error) {
+            return "ERROR";
+        }
+    });
+
+    return result;
 }
 
 function GetJsonSync(url, data) {
