@@ -43,7 +43,7 @@ var mainTableRowSelectUrl = "/Home/MainTableRowSelect";
 
 $(document).ready(function () {
 
-    GetJsonAsync(initialScreenDataUrl, null, SetupInitialScreen);
+    getJsonAsync(initialScreenDataUrl, null, setupInitialScreen);
 
     $(document).on("click", "tr[role='row']", function (e) {
         if (typeof e.currentTarget._DT_RowIndex === 'undefined' || e.currentTarget._DT_RowIndex === null) {
@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             // this line is for testing only, should replace with code to fill parent child tables related data
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
-            PostJsonSync(mainTableRowSelectUrl, JSON.stringify(data));
+            postJsonSync(mainTableRowSelectUrl, JSON.stringify(data));
         }
 
 
@@ -93,23 +93,23 @@ $(document).ready(function () {
 
 });
 
-function SetupInitialScreen(data, textStatus, xhr) {
-    FillSelect($(mainTableSelect), data.allTables);
+function setupInitialScreen(data, textStatus, xhr) {
+    fillSelect($(mainTableSelect), data.allTables);
     columnInfoArr = data.columns;
     allOperators = data.operators;
-    FillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
-    FillSelect($(operatorSelect), data.operators);
+    fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
+    fillSelect($(operatorSelect), data.operators);
 
     // set gui for first column
     //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
     columnSelectionChanged($(columnSelect).val());
 }
 
-function OperatorChanged() {
-    SetColumnFilterTextDisabled($(operatorSelect).val());
+function operatorChanged() {
+    setColumnFilterTextDisabled($(operatorSelect).val());
 }
 
-function ToSQLInCompatible(value, isNumeric) {
+function toSQLInCompatible(value, isNumeric) {
     // converts comma delimited to IN comatible
     // e.g. for numeric 4,7,9 it should return (4,7,9). For text value jack,larry,ken it should return ('jack','larry','ken')
     var arr = value.split(',');
@@ -121,7 +121,7 @@ function ToSQLInCompatible(value, isNumeric) {
     });
     return "(" + result + ")";
 }
-function AddFilter() {
+function addFilter() {
     var newFilter = "";
     var filterCriteria = $(filterCriteriaTextArea).val();
     var selectedOperator = $(operatorSelect).val();
@@ -130,7 +130,7 @@ function AddFilter() {
     if (selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL) {
         newFilter = $(columnSelect).val() + " " + selectedOperator;
     } else if (selectedOperator === OPERATOR_IN || selectedOperator === OPERATOR_NOT_IN) {
-        filterText = ToSQLInCompatible(filterText, category === COLUMN_CATEGORY_NUMERIC);
+        filterText = toSQLInCompatible(filterText, category === COLUMN_CATEGORY_NUMERIC);
         newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
     } else if (selectedOperator === OPERATOR_LIKE) {
         if (filterText.indexOf("%") < 0) {
@@ -167,9 +167,9 @@ function AddFilter() {
 
 function tableChanged(newTable) {
     var data = { table: $(mainTableSelect).val() };
-    var result = GetJsonSync(getColumnsUrl, data);
+    var result = getJsonSync(getColumnsUrl, data);
     columnInfoArr = result.columns;
-    FillSelectByProperty($(columnSelect), columnInfoArr, COLUMN_INFO_NAME);
+    fillSelectByProperty($(columnSelect), columnInfoArr, COLUMN_INFO_NAME);
     columnSelectionChanged($(columnSelect).val());
     //$(filterCriteriaTextArea).val("");
 
@@ -190,13 +190,13 @@ function tableChanged(newTable) {
 //}
 
 // get main table data using main table and filter criteria
-function GetMainTableData() {
+function getMainTableData() {
     var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
-    ClearJQTableHeader(mainDataTableId);
-    FillJQTable(mainDataTableId, mainTableDataGetUrl, model);
+    clearJQTableHeader(mainDataTableId);
+    fillJQTable(mainDataTableId, mainTableDataGetUrl, model);
 }
 
-function ClearJQTableHeader(tableName) {
+function clearJQTableHeader(tableName) {
     // clear datatable header row before fill again
     // assumed table html will always have "<thead><tr></tr></thead>" initially
 
@@ -216,7 +216,7 @@ function ClearJQTableHeader(tableName) {
 }
 
 // fill jQuery datatable using passed table name, url and model
-function FillJQTable(tableName, url, model) {
+function fillJQTable(tableName, url, model) {
     $.ajax({
         type: "GET",
         url: url,
@@ -253,7 +253,7 @@ function FillJQTable(tableName, url, model) {
     });
 }
 
-function GetJsonAsync(url, data, callback) {
+function getJsonAsync(url, data, callback) {
     $.ajax({
         type: "GET",
         url: url,
@@ -266,7 +266,7 @@ function GetJsonAsync(url, data, callback) {
     });
 }
 
-function PostJsonSync(url, model) {
+function postJsonSync(url, model) {
     var result;
 
     $.ajax({
@@ -287,7 +287,7 @@ function PostJsonSync(url, model) {
     return result;
 }
 
-function GetJsonSync(url, data) {
+function getJsonSync(url, data) {
     var result;
 
     $.ajax({
@@ -307,14 +307,14 @@ function GetJsonSync(url, data) {
     return result;
 }
 
-function FillSelectByProperty(selectObj, json, property) {
+function fillSelectByProperty(selectObj, json, property) {
     // fills select using json
     $(selectObj).empty();
     $.each(json, function (i, element) {
         selectObj.append($('<option></option>').attr('value', element[property]).text(element[property]));
     });
 }
-function FillSelect(selectObj, json) {
+function fillSelect(selectObj, json) {
     // fills select using json
     $(selectObj).empty();
     $.each(json, function (i, value) {
@@ -323,7 +323,7 @@ function FillSelect(selectObj, json) {
 }
 
 // searches array resturns required property
-function SearchArray(arr, valueToSearch, searchProperty, returnProperty) {
+function searchArray(arr, valueToSearch, searchProperty, returnProperty) {
     // fills select using json
     var foundElement = arr.find(obj => obj[searchProperty] === valueToSearch)[returnProperty];
 
@@ -331,29 +331,29 @@ function SearchArray(arr, valueToSearch, searchProperty, returnProperty) {
 }
 
 function columnSelectionChanged(val) {
-    SetupWhenColumnChanged(val);
-    SetColumnFilterTextDisabled($(operatorSelect).val());
+    setupWhenColumnChanged(val);
+    setColumnFilterTextDisabled($(operatorSelect).val());
 }
 
-function SetupWhenColumnChanged(colName) {
+function setupWhenColumnChanged(colName) {
     // find data type
-    category = SearchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+    category = searchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
     var newCopy = JSON.parse(JSON.stringify(allOperators));
     if (category !== COLUMN_CATEGORY_TEXT) {
         // remove 'like'
-        RemoveArrayElement(newCopy, OPERATOR_LIKE);
+        removeArrayElement(newCopy, OPERATOR_LIKE);
     }
-    FillSelect($(operatorSelect), newCopy);
+    fillSelect($(operatorSelect), newCopy);
 }
 
-function RemoveArrayElement(array, element) {
+function removeArrayElement(array, element) {
     var index = array.indexOf(element);
     if (index > -1) {
         array.splice(index, 1);
     }
 }
 
-function SetColumnFilterTextDisabled(selectedOperator) {
+function setColumnFilterTextDisabled(selectedOperator) {
     var shouldDisabled = selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL;
     $(columnFilterText).val("");
     $(columnFilterText).prop("disabled", shouldDisabled);
