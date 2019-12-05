@@ -77,7 +77,7 @@ $(document).ready(function () {
 
             // this line is for testing only, should replace with code to fill parent child tables related data
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
-            postJsonSync(mainTableRowSelectUrl, JSON.stringify(data));
+            postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
         }
 
 
@@ -92,6 +92,11 @@ $(document).ready(function () {
     //});
 
 });
+
+function setupParentChildSections(data, textStatus, xhr) {
+    alert("need to be coded");
+}
+
 
 function setupInitialScreen(data, textStatus, xhr) {
     fillSelect($(mainTableSelect), data.allTables);
@@ -193,7 +198,34 @@ function tableChanged(newTable) {
 function getMainTableData() {
     var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
     clearJQTableHeader(mainDataTableId);
-    fillJQTable(mainDataTableId, mainTableDataGetUrl, model);
+    var result = getJsonSync(mainTableDataGetUrl, model);
+    fillJQTable(result, mainDataTableId);
+}
+
+function fillJQTable(result, tableName) {
+    var str;
+
+    var indexOfArr = jqDtNameArr.indexOf(tableName);
+    jqDtColArr[indexOfArr] = result.columns;
+
+    $.each(result.columns, function (k, colObj) {
+        str = '<th>' + colObj.name + '</th>';
+        $(str).appendTo(tableName + '>thead>tr');
+    });
+
+    $(tableName).DataTable(
+        {
+            "data": result.data,
+            "columns": result.columns,
+            select: true
+            //,
+            //"initComplete": function () {
+            //    $(document).on("click", "tr[role='row']", function () {
+            //        alert($(this).children('td:first-child').text());
+            //    });
+            //}
+        }
+    );
 }
 
 function clearJQTableHeader(tableName) {
@@ -215,44 +247,6 @@ function clearJQTableHeader(tableName) {
     }
 }
 
-// fill jQuery datatable using passed table name, url and model
-function fillJQTable(tableName, url, model) {
-    $.ajax({
-        type: "GET",
-        url: url,
-        data: model,
-        dataType: "json",
-        success: function (result) {
-            var str;
-
-            var indexOfArr = jqDtNameArr.indexOf(tableName);
-            jqDtColArr[indexOfArr] = result.columns;
-
-            $.each(result.columns, function (k, colObj) {
-                str = '<th>' + colObj.name + '</th>';
-                $(str).appendTo(tableName + '>thead>tr');
-            });
-
-            $(tableName).DataTable(
-                {
-                    "data": result.data,
-                    "columns": result.columns,
-                    select: true
-                    //,
-                    //"initComplete": function () {
-                    //    $(document).on("click", "tr[role='row']", function () {
-                    //        alert($(this).children('td:first-child').text());
-                    //    });
-                    //}
-                }
-            );
-        },
-        error: function (error) {
-            alert("ERROR: " + error);
-        }
-    });
-}
-
 function getJsonAsync(url, data, callback) {
     $.ajax({
         type: "GET",
@@ -266,19 +260,16 @@ function getJsonAsync(url, data, callback) {
     });
 }
 
-function postJsonSync(url, model) {
+function postJsonAsync(url, model, callback) {
     var result;
 
     $.ajax({
         type: "POST",
         url: url,
         data: model,
-        async: false,
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
-        success: function (jsonResult) {
-            result = jsonResult;
-        },
+        success: callback,
         error: function (error) {
             return "ERROR";
         }
