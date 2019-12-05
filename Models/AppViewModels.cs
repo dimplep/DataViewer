@@ -23,10 +23,17 @@ namespace DataViewer.Models
         public int topN { set; get; }
     }
 
+    public class MainTableRowSelectModel
+    {
+        public string table { get; set; }
+        public List<KeyValueModel> keyVals { get; set; }
+
+    }
+
     public class KeyValueModel
     {
-        public string something1 { set; get; }
-        public string something2 { set; get; }
+        public string keyName { set; get; }
+        public string keyValue { set; get; }
 
     }
 

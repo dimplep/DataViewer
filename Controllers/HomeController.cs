@@ -73,7 +73,7 @@ namespace DataViewer.Controllers
 
 
         [HttpPost]
-        public IActionResult MainTableRowSelect([FromBody] IList<KeyValueModel> model)
+        public IActionResult MainTableRowSelect([FromBody] MainTableRowSelectModel model)
         {
 
             return Json(new { });

@@ -57,34 +57,26 @@ $(document).ready(function () {
 
             var indexOfArr = jqDtNameArr.indexOf(tableId);
             var colArr = jqDtColArr[indexOfArr];
-            //var data = [];
+            var keyVals = [];
 
-            //for (var ii = 0; ii < colArr.length; ii++) {
-            //    if (colArr[ii].isPrimary) {
-            //        data.push({
-            //            key: colArr[ii].name,
-            //            value: $(this)[0].cells[ii].textContent
-            //        });
-            //    }
-            //}
+            for (var ii = 0; ii < colArr.length; ii++) {
+                if (colArr[ii].isPrimary) {
+                    keyVals.push({
+                        keyName: colArr[ii].name,
+                        keyValue: $(this)[0].cells[ii].textContent
+                    });
+                }
+            }
 
-            var data = [];
-            var elem = {
-                something1: 'my name',
-                something2: 'a value'
+            var data =
+            {
+                table: $(mainTableSelect).val(),
+                keyVals: keyVals
             };
-            data.push(elem);
 
-            // this line is for testing only, should replace with code to fill parent child tables related data
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
             postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
         }
-
-
-
-        alert("Selected row index " + e.currentTarget._DT_RowIndex + " first column value : " + $(this).children('td:first-child').text());
-        //}
-    //    $(this).toggleClass('selected');
     });
 
     //$(tableName + ' tbody').on('click', 'tr', function () {
