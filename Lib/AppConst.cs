@@ -50,5 +50,12 @@ namespace DataViewer.Lib
             public const string DATE = "date";      // date, datetime, time
             public const string OTHER = "other";      // Any other column types than text, number, date should be excluded
         }
+
+        public static class RelationType
+        {
+            public const string PARENT = "Parent";
+            public const string CHILD = "Child";
+
+        }
     }
 }

@@ -26,14 +26,23 @@ namespace DataViewer.Models
     public class MainTableRowSelectModel
     {
         public string table { get; set; }
-        public List<KeyValueModel> keyVals { get; set; }
+        public List<ColNameValueModel> colNameVals { get; set; }
 
     }
 
-    public class KeyValueModel
+    public class RelatedDataSelectModel
     {
-        public string keyName { set; get; }
-        public string keyValue { set; get; }
+        public string fromEntity { get; set; }
+        public string toEntity { get; set; }
+        public string toEntityType { get; set; }
+        public List<ColNameValueModel> keyVals { get; set; }
+        public int topN { get; set; }
+    }
+
+    public class ColNameValueModel
+    {
+        public string colName { set; get; }
+        public string colValue { set; get; }
 
     }
 

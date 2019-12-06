@@ -14,6 +14,10 @@ const OPERATOR_NOT_IN = "Not In";
 const OPERATOR_IS_NULL = "Is Null";
 const OPERATOR_IS_NOT_NULL = "Is Not Null";
 
+// RELATION Types
+const RELATION_PARENT = "Parent";
+const RELATION_CHILD = "Child";
+
 // UI elements
 var mainTableSelect = '#mainTableSelect';
 var columnSelect = '#columnSelect';
@@ -37,13 +41,14 @@ var allOperators;       // all possible operators
 var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 
-var mainTablekeyVals;           // store main table selected row's key/value array until figure out how to retrieve table object by table id
+var mainTableKeyVals;           // store main table selected row's key/value array until figure out how to retrieve table object by table id
 
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
 var mainTableDataGetUrl = "/Home/MainTableDataFetch";
 var mainTableRowSelectUrl = "/Home/MainTableRowSelect";
+var parentOrChildGetData = "/Home/ParentOrChildGetData";
 
 $(document).ready(function () {
 
@@ -61,13 +66,13 @@ $(document).ready(function () {
 
             var indexOfArr = jqDtNameArr.indexOf(tableId);
             var colArr = jqDtColArr[indexOfArr];
-            var keyVals = [];
+            var colNameVals = [];
 
             for (var ii = 0; ii < colArr.length; ii++) {
                 if (colArr[ii].isPrimary) {
-                    keyVals.push({
-                        keyName: colArr[ii].name,
-                        keyValue: $(this)[0].cells[ii].textContent
+                    colNameVals.push({
+                        colName: colArr[ii].name,
+                        colValue: $(this)[0].cells[ii].textContent
                     });
                 }
             }
@@ -75,11 +80,11 @@ $(document).ready(function () {
             var data =
             {
                 table: $(mainTableSelect).val(),
-                keyVals: keyVals
+                colNameVals: colNameVals
             };
 
             // store in global var for later use
-            mainTablekeyVals = keyVals;
+            mainTableKeyVals = colNameVals;
 
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
             postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
@@ -99,8 +104,22 @@ function setupParentChildSections(data, textStatus, xhr) {
 }
 
 function parentEntityChange(entity) {
-    alert(entity);
+    var data =
+    {
+        fromEntity: $(mainTableSelect).val(),
+        toEntity: entity,
+        toEntityType: RELATION_PARENT,
+        keyVals: mainTableKeyVals,
+        topN: $(topNText).val()
+    };
+
+    postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupParentDataTable);
 }
+
+function setupParentDataTable(data, textStatus, xhr) {
+    fillJQTable(data, parentDataTableId);
+}
+
 
 function childEntityChange(entity) {
     alert(entity);

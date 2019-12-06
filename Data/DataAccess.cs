@@ -3,7 +3,7 @@ using DataViewer.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-
+using System.Linq;
 
 namespace DataViewer.Data
 {
@@ -11,6 +11,7 @@ namespace DataViewer.Data
     {
         DataTable GetData(string sql);
         List<ColumnInfo> GetColumns(string table);
+        string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<ColumnInfo> cols);
     }
 
     public class DataAccess : IDataAccess
@@ -131,6 +132,26 @@ namespace DataViewer.Data
             }
 
             return dataCategory;
+        }
+
+        // returns criteria string (that can used in where)
+        public virtual string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<ColumnInfo> cols)
+        {
+            string criteria = "";
+            foreach(ColNameValueModel pair in colNameVals)
+            {
+                string newCriteria = "";
+                if (cols.First(o => o.name == pair.colName).category == AppConst.Category.NUMERIC)
+                {
+                    newCriteria = pair.colName + " = " + pair.colValue;
+                }
+                else
+                {
+                    newCriteria = pair.colName + " = '" + pair.colValue + "'";
+                }
+                criteria += (criteria != "" ? " AND " : "") + newCriteria;
+            }
+            return criteria;
         }
 
     }
