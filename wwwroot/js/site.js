@@ -37,6 +37,8 @@ var allOperators;       // all possible operators
 var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 
+var mainTablekeyVals;           // store main table selected row's key/value array until figure out how to retrieve table object by table id
+
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
@@ -76,6 +78,9 @@ $(document).ready(function () {
                 keyVals: keyVals
             };
 
+            // store in global var for later use
+            mainTablekeyVals = keyVals;
+
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
             postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
         }
@@ -93,6 +98,13 @@ function setupParentChildSections(data, textStatus, xhr) {
     fillSelect($(childTableSelect), data.childEntities, true);
 }
 
+function parentEntityChange(entity) {
+    alert(entity);
+}
+
+function childEntityChange(entity) {
+    alert(entity);
+}
 
 function setupInitialScreen(data, textStatus, xhr) {
     fillSelect($(mainTableSelect), data.allTables);
