@@ -76,7 +76,7 @@ namespace DataViewer.Controllers
         public IActionResult MainTableRowSelect([FromBody] MainTableRowSelectModel model)
         {
 
-            return Json(new { });
+            return Json(new { parentEntities = _businessLayer.GetParentEntities(model), childEntities = _businessLayer.GetChildEntities(model) });
             //return Json(new { recordsFiltered = 1, recordsTotal = 1, data = list.ToArray() });
         }
 

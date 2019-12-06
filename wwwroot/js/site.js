@@ -20,7 +20,9 @@ var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
 var columnFilterText = '#columnFilterText';
 var filterCriteriaTextArea = '#filterCriteriaTextArea';
-var topNText = "topNText";
+var topNText = "#topNText";
+var parentTableSelect = "#parentTableSelect";
+var childTableSelect = "#childTableSelect";
 
 // jquery datatables
 var mainDataTableId = "#mainDataTable";
@@ -86,7 +88,9 @@ $(document).ready(function () {
 });
 
 function setupParentChildSections(data, textStatus, xhr) {
-    alert("need to be coded");
+    // fill parent / child table selects
+    fillSelect($(parentTableSelect), data.parentEntities, true);
+    fillSelect($(childTableSelect), data.childEntities, true);
 }
 
 
@@ -209,7 +213,8 @@ function fillJQTable(result, tableName) {
         {
             "data": result.data,
             "columns": result.columns,
-            select: true
+            select: true,
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]]
             //,
             //"initComplete": function () {
             //    $(document).on("click", "tr[role='row']", function () {
@@ -297,9 +302,14 @@ function fillSelectByProperty(selectObj, json, property) {
         selectObj.append($('<option></option>').attr('value', element[property]).text(element[property]));
     });
 }
-function fillSelect(selectObj, json) {
+function fillSelect(selectObj, json, addBlank) {
     // fills select using json
     $(selectObj).empty();
+
+    if (addBlank === true) {
+        selectObj.append($('<option></option>').attr('value', '').text(''));
+    }
+
     $.each(json, function (i, value) {
         selectObj.append($('<option></option>').attr('value', value).text(value));
     });

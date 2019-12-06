@@ -68,10 +68,9 @@ namespace DataViewer.Data
             return dt;
         }
 
-
         //public override string GetColumnFilterByType(string schemaTable, string column, string filterOperator, string value)
         //{
-            
+
         //    string retVal;
         //    if (filterOperator == Operators.IS_NULL || filterOperator == Operators.IS_NOT_NULL)
         //    {

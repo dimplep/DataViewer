@@ -1,4 +1,5 @@
 ﻿using DataViewer.Lib;
+using DataViewer.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -131,7 +132,6 @@ namespace DataViewer.Data
 
             return dataCategory;
         }
-
 
     }
 

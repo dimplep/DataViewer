@@ -83,7 +83,21 @@ namespace DataViewer.Lib
             return dt;
         }
 
+        // find entities in relations where given entity's primary key is being used as foreign key
+        public List<string> GetChildEntities(MainTableRowSelectModel model)
+        {
+            return _relations.AsEnumerable()
+                .Where(r => r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.table)
+                .Select(r => r.Field<string>(RelationDataColumns.CHILD_TABLE)).Distinct().OrderBy(o => o).ToList();
+        }
 
+        // find entities in relations where given entity contains foreign keys
+        public List<string> GetParentEntities(MainTableRowSelectModel model)
+        {
+            return _relations.AsEnumerable()
+                .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.table)
+                .Select(r => r.Field<string>(RelationDataColumns.PARENT_TABLE)).Distinct().OrderBy(o => o).ToList();
+        }
     }
 
     // static implementation of relations reading to avoid disk i/o
