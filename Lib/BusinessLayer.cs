@@ -96,31 +96,56 @@ namespace DataViewer.Lib
             string sql = "SELECT TOP 1 * FROM " + model.fromEntity + " WHERE " + criteria;
             DataTable dt = _dataAccess.GetData(sql);        // get from table row for passed pk values
 
-            //if (model.toEntityType == RelationType.PARENT)
-            //{
-            // find fk values and return matching parent table data
+            List<ColNameValueModel> colVals;
 
-            List<ColNameValueModel> pkColVals = new List<ColNameValueModel>();
-                foreach(var match in _relations.AsEnumerable()
-                    .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.fromEntity
-                            && r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.toEntity))
-                {
-                    // search by child key but set parent key because searching in parent
-                    pkColVals.Add(new ColNameValueModel { colName = match.Field<string>(RelationDataColumns.PARENT_KEY),
-                                                colValue = dt.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString() });
-                }
-                string toCiteria = _dataAccess.ColNameValToCriteria(pkColVals, toEntityCols);
-                sql = "SELECT TOP 1 * FROM " + model.toEntity + " WHERE " + toCiteria;
+            if (model.toEntityType == RelationType.PARENT)
+            {
+                colVals = ChildToParentColVals(model, dt);
+            }
+            else
+            {
+                colVals = ParentToChildColVals(model, dt);
+            }
 
-
+            string toCiteria = _dataAccess.ColNameValToCriteria(colVals, toEntityCols);
+            sql = "SELECT TOP " + model.topN.ToString() + " * FROM " + model.toEntity + " WHERE " + toCiteria;
             DataTable toDt = EntitySqlToDtForFrontEnd(model.toEntity, sql, ref columnsForFrontEnd);
-            return toDt;
-            //}
-            //else
-            //{
-            //
-            //}
 
+            return toDt;
+        }
+
+        private List<ColNameValueModel> ChildToParentColVals(RelatedDataSelectModel model, DataTable childTable)
+        {
+            List<ColNameValueModel> colVals = new List<ColNameValueModel>();
+            foreach (var match in _relations.AsEnumerable()
+                .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.fromEntity
+                        && r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.toEntity))
+            {
+                // search by child key but set parent key because searching in parent
+                colVals.Add(new ColNameValueModel
+                {
+                    colName = match.Field<string>(RelationDataColumns.PARENT_KEY),
+                    colValue = childTable.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString()
+                });
+            }
+            return colVals;
+        }
+
+        private List<ColNameValueModel> ParentToChildColVals(RelatedDataSelectModel model, DataTable parentTable)
+        {
+            List<ColNameValueModel> colVals = new List<ColNameValueModel>();
+            foreach (var match in _relations.AsEnumerable()
+                .Where(r => r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.fromEntity
+                        && r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.toEntity))
+            {
+                // search by child key but set parent key because searching in parent
+                colVals.Add(new ColNameValueModel
+                {
+                    colName = match.Field<string>(RelationDataColumns.CHILD_KEY),
+                    colValue = parentTable.Rows[0][match.Field<string>(RelationDataColumns.PARENT_KEY)].ToString()
+                });
+            }
+            return colVals;
         }
 
         // find entities in relations where given entity's primary key is being used as foreign key

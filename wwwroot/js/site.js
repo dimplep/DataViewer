@@ -122,7 +122,21 @@ function setupParentDataTable(data, textStatus, xhr) {
 
 
 function childEntityChange(entity) {
-    alert(entity);
+    var data =
+    {
+        fromEntity: $(mainTableSelect).val(),
+        toEntity: entity,
+        toEntityType: RELATION_CHILD,
+        keyVals: mainTableKeyVals,
+        topN: $(topNText).val()
+    };
+
+    postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupChildDataTable);
+
+}
+
+function setupChildDataTable(data, textStatus, xhr) {
+    fillJQTable(data, childDataTableId);
 }
 
 function setupInitialScreen(data, textStatus, xhr) {
@@ -224,7 +238,7 @@ function tableChanged(newTable) {
 // get main table data using main table and filter criteria
 function getMainTableData() {
     var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
-    clearJQTableHeader(mainDataTableId);
+    //clearJQTableHeader(mainDataTableId);
     var result = getJsonSync(mainTableDataGetUrl, model);
     fillJQTable(result, mainDataTableId);
 }
@@ -234,6 +248,9 @@ function fillJQTable(result, tableName) {
 
     var indexOfArr = jqDtNameArr.indexOf(tableName);
     jqDtColArr[indexOfArr] = result.columns;
+
+    // clear prior table
+    clearTable(tableName);
 
     $.each(result.columns, function (k, colObj) {
         str = '<th>' + colObj.name + '</th>';
@@ -246,20 +263,12 @@ function fillJQTable(result, tableName) {
             "columns": result.columns,
             select: true,
             lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]]
-            //,
-            //"initComplete": function () {
-            //    $(document).on("click", "tr[role='row']", function () {
-            //        alert($(this).children('td:first-child').text());
-            //    });
-            //}
+            //destroy: true
         }
     );
 }
 
-function clearJQTableHeader(tableName) {
-    // clear datatable header row before fill again
-    // assumed table html will always have "<thead><tr></tr></thead>" initially
-
+function clearTable(tableName) {
     var table;
     if ($.fn.dataTable.isDataTable(tableName)) {
         table = $(tableName).DataTable();
@@ -267,13 +276,26 @@ function clearJQTableHeader(tableName) {
         $(tableName).find("thead").find("tr").empty();
         $(tableName).find("tbody").empty();
     }
-    else {
-        $(tableName).on("click", "tr[role='row']", function () {
-            //alert($(this).children('td:first-child').text());
-            $(this).toggleClass('selected');
-        });
-    }
 }
+
+//function clearJQTableHeader(tableName) {
+//    // clear datatable header row before fill again
+//    // assumed table html will always have "<thead><tr></tr></thead>" initially
+
+//    var table;
+//    if ($.fn.dataTable.isDataTable(tableName)) {
+//        table = $(tableName).DataTable();
+//        table.destroy();
+//        $(tableName).find("thead").find("tr").empty();
+//        $(tableName).find("tbody").empty();
+//    }
+//    else {
+//        $(tableName).on("click", "tr[role='row']", function () {
+//            //alert($(this).children('td:first-child').text());
+//            $(this).toggleClass('selected');
+//        });
+//    }
+//}
 
 function getJsonAsync(url, data, callback) {
     $.ajax({
