@@ -27,7 +27,7 @@ namespace DataViewer.Models
     {
         public string table { get; set; }
         public List<ColNameValueModel> colNameVals { get; set; }
-
+        public bool hideChilEntitiesWhenNoData { get; set; }
     }
 
     public class RelatedDataSelectModel

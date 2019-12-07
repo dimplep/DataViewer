@@ -151,9 +151,33 @@ namespace DataViewer.Lib
         // find entities in relations where given entity's primary key is being used as foreign key
         public List<string> GetChildEntities(MainTableRowSelectModel model)
         {
-            return _relations.AsEnumerable()
-                .Where(r => r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.table)
-                .Select(r => r.Field<string>(RelationDataColumns.CHILD_TABLE)).Distinct().OrderBy(o => o).ToList();
+            List<string> allChildEntities = _relations.AsEnumerable()
+                                            .Where(r => r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.table)
+                                            .Select(r => r.Field<string>(RelationDataColumns.CHILD_TABLE)).Distinct().OrderBy(o => o).ToList();
+
+            List<string> childEntities = new List<string>();
+            if (model.hideChilEntitiesWhenNoData)
+            {
+                // if need to hide child entities when no related data found, query each child entities to check if data exists
+                foreach (string childEntity in allChildEntities)
+                {
+                    RelatedDataSelectModel fakeModel = new RelatedDataSelectModel { topN = 1, fromEntity = model.table, toEntity = childEntity,
+                                                                                toEntityType = RelationType.CHILD, keyVals = model.colNameVals };
+                    List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
+                    DataTable dt = GetParentOrChildData(fakeModel, ref columnsForFrontEnd);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        childEntities.Add(childEntity);
+                    }
+                }
+            }
+            else
+            {
+                childEntities = allChildEntities;
+            }
+
+            return childEntities;
         }
 
         // find entities in relations where given entity contains foreign keys

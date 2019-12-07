@@ -27,6 +27,7 @@ var filterCriteriaTextArea = '#filterCriteriaTextArea';
 var topNText = "#topNText";
 var parentTableSelect = "#parentTableSelect";
 var childTableSelect = "#childTableSelect";
+var hideIfNoDataCheck = '#hideIfNoDataCheck';
 
 // jquery datatables
 var mainDataTableId = "#mainDataTable";
@@ -80,7 +81,8 @@ $(document).ready(function () {
             var data =
             {
                 table: $(mainTableSelect).val(),
-                colNameVals: colNameVals
+                colNameVals: colNameVals,
+                hideChilEntitiesWhenNoData: $(hideIfNoDataCheck).prop("checked")
             };
 
             // store in global var for later use
