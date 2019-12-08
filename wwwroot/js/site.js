@@ -104,12 +104,12 @@ $(document).ready(function () {
 });
 
 function navigateFromChild() {
-    var colNameVals = selectedRowPkColAndValues(childDataTableId);
+    var pkCriteria = primaryKeyCriteriaForSelectedRow(childDataTableId)
 
 }
 
 function navigateFromParent() {
-    var colNameVals = selectedRowPkColAndValues(parentDataTableId);
+    var pkCriteria = primaryKeyCriteriaForSelectedRow(parentDataTableId);
 }
 
 
@@ -221,7 +221,6 @@ function setupInitialScreen(data, textStatus, xhr) {
     var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
     jqDtColArr[indexOfArr] = data.columns;
 
-
     allOperators = data.operators;
     fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
     fillSelect($(operatorSelect), data.operators);
@@ -257,12 +256,12 @@ function appendFilter() {
     var selectedOperator = $(operatorSelect).val();
     var filterText = $(columnFilterText).val();
 
-    filterCriteria = AddCriteria(filterCriteria, selectedColumn, selectedOperator, filterText);
+    filterCriteria = addCriteria(filterCriteria, selectedColumn, selectedOperator, filterText);
     
     $(filterCriteriaTextArea).val(filterCriteria);
 }
 
-function AddCriteria(currentCriteria, selectedColumn, selectedOperator, filterText) {
+function addCriteria(currentCriteria, selectedColumn, selectedOperator, filterText) {
     if (selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL) {
         newFilter = selectedColumn + " " + selectedOperator;
     } else if (selectedOperator === OPERATOR_IN || selectedOperator === OPERATOR_NOT_IN) {
@@ -287,7 +286,21 @@ function AddCriteria(currentCriteria, selectedColumn, selectedOperator, filterTe
     return filterCriteria;
 }
 
+// returns criteria for selected ientity row, assumed a row is selected
+function primaryKeyCriteriaForSelectedRow(tableId) {
+    var indexOfArr = jqDtNameArr.indexOf(tableId);
+    var colArr = jqDtColArr[indexOfArr];
+    var filterCriteria = "";
 
+    var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
+    for (var ii = 0; ii < colArr.length; ii++) {
+        if (colArr[ii].isPrimaryKey) {
+            filterCriteria = addCriteria(filterCriteria, colArr[ii].name, '=', selectedRow[colArr[ii].name]);
+        }
+    }
+
+    return filterCriteria;
+}
 
 //function AddFilter() {
 //    var newFilter = $(columnFilterText).val();
