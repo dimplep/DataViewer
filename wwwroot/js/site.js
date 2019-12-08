@@ -37,7 +37,7 @@ var parentDataTableId = "#parentDataTable";
 var category;
 
 // page global variables
-var columnInfoArr;     // create placeholder
+var columnInfoArr;     // stores main entity available columns for filter
 var allOperators;       // all possible operators
 var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
@@ -78,10 +78,12 @@ $(document).ready(function () {
                     if (colArr[ii].isPrimary) {
                         colNameVals.push({
                             colName: colArr[ii].name,
-                            colValue: $(this)[0].cells[ii].textContent
+                            //colValue: $(this)[0].cells[ii].textContent
+                            colValue: $(tableId).DataTable().rows({ selected: true }).data()[0][colArr[ii].name]
                         });
                     }
                 }
+                
 
                 var data =
                 {
@@ -145,9 +147,9 @@ function setupParentDataTable(data, textStatus, xhr) {
 
 
 function childEntityChange(entity) {
-    var selectedRowCount = $(mainDataTableId).DataTable().rows({ selected: true }).count();
-    var selectedRowData = $(mainDataTableId).DataTable().rows({ selected: true }).data()[0];
-    alert(selectedRowData['DepartmentID']);
+    //var selectedRowCount = $(mainDataTableId).DataTable().rows({ selected: true }).count();
+    //var selectedRowData = $(mainDataTableId).DataTable().rows({ selected: true }).data()[0];
+    //alert(selectedRowData['DepartmentID']);
     
 
     if (entity !== '') {
@@ -274,6 +276,13 @@ function getMainTableData() {
     //clearJQTableHeader(mainDataTableId);
     var result = getJsonSync(mainTableDataGetUrl, model);
     fillJQTable(result, mainDataTableId);
+
+    // clear parent/child selects, tables
+    $(parentTableSelect).empty();
+    $(childTableSelect).empty();
+    clearTable(childDataTableId);
+    clearTable(parentDataTableId);
+
 }
 
 function fillJQTable(result, tableName) {
