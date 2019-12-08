@@ -73,13 +73,13 @@ $(document).ready(function () {
                 var indexOfArr = jqDtNameArr.indexOf(tableId);
                 var colArr = jqDtColArr[indexOfArr];
                 var colNameVals = [];
-
+                var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
                 for (var ii = 0; ii < colArr.length; ii++) {
                     if (colArr[ii].isPrimary) {
                         colNameVals.push({
                             colName: colArr[ii].name,
                             //colValue: $(this)[0].cells[ii].textContent
-                            colValue: $(tableId).DataTable().rows({ selected: true }).data()[0][colArr[ii].name]
+                            colValue: selectedRow[colArr[ii].name]
                         });
                     }
                 }
