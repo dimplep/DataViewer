@@ -63,33 +63,44 @@ $(document).ready(function () {
         var tableId = '#' + $(this).closest('table').attr('id');
 
         if (tableId === mainDataTableId) {
-            // loop through columns, find primary key values and create json
+            var selectedRowCount = $(mainDataTableId).DataTable().rows({ selected: true }).count();
 
-            var indexOfArr = jqDtNameArr.indexOf(tableId);
-            var colArr = jqDtColArr[indexOfArr];
-            var colNameVals = [];
+            if (selectedRowCount > 0) {
+                // if selected
 
-            for (var ii = 0; ii < colArr.length; ii++) {
-                if (colArr[ii].isPrimary) {
-                    colNameVals.push({
-                        colName: colArr[ii].name,
-                        colValue: $(this)[0].cells[ii].textContent
-                    });
+                // loop through columns, find primary key values and create json
+
+                var indexOfArr = jqDtNameArr.indexOf(tableId);
+                var colArr = jqDtColArr[indexOfArr];
+                var colNameVals = [];
+
+                for (var ii = 0; ii < colArr.length; ii++) {
+                    if (colArr[ii].isPrimary) {
+                        colNameVals.push({
+                            colName: colArr[ii].name,
+                            colValue: $(this)[0].cells[ii].textContent
+                        });
+                    }
                 }
+
+                var data =
+                {
+                    table: $(mainTableSelect).val(),
+                    colNameVals: colNameVals,
+                    hideChilEntitiesWhenNoData: $(hideIfNoDataCheck).prop("checked")
+                };
+
+                // store in global var for later use
+                mainTableKeyVals = colNameVals;
+
+                //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
+                postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
             }
-
-            var data =
-            {
-                table: $(mainTableSelect).val(),
-                colNameVals: colNameVals,
-                hideChilEntitiesWhenNoData: $(hideIfNoDataCheck).prop("checked")
-            };
-
-            // store in global var for later use
-            mainTableKeyVals = colNameVals;
-
-            //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
-            postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
+            else {
+                // unselected row
+                $(parentTableSelect).empty();
+                $(childTableSelect).empty();
+            }
 
             // clear parent, child tables
             clearTable(childDataTableId);
@@ -134,6 +145,11 @@ function setupParentDataTable(data, textStatus, xhr) {
 
 
 function childEntityChange(entity) {
+    var selectedRowCount = $(mainDataTableId).DataTable().rows({ selected: true }).count();
+    var selectedRowData = $(mainDataTableId).DataTable().rows({ selected: true }).data()[0];
+    alert(selectedRowData['DepartmentID']);
+    
+
     if (entity !== '') {
         var data =
         {
