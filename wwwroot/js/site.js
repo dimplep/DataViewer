@@ -103,19 +103,30 @@ $(document).ready(function () {
 
 });
 
+function navigateFromChild() {
+    var colNameVals = selectedRowPkColAndValues(childDataTableId);
+
+}
+
+function navigateFromParent() {
+    var colNameVals = selectedRowPkColAndValues(parentDataTableId);
+}
+
+
+
 // according to table row selected will refresh (enable/disable) navigation button
 function RefreshNavigationBtnForTable(tableId) {
     var disable = true;
     if ($.fn.dataTable.isDataTable(tableId)) {
         disable = $(tableId).DataTable().rows({ selected: true }).count() <= 0;
     }
-    
+
     var btnId = "";
     if (tableId === childDataTableId) {
-        btnId = '#childNavigateFromBtn';
+        btnId = childNavigateFromBtn;
     }
     else {
-        btnId = '#parentNavigateFromBtn';
+        btnId = parentNavigateFromBtn;
     }
     DisableNavigationFromBtn(btnId, disable);
 }
@@ -132,7 +143,7 @@ function selectedRowPkColAndValues(tableId) {
     var colNameVals = [];
     var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
     for (var ii = 0; ii < colArr.length; ii++) {
-        if (colArr[ii].isPrimary) {
+        if (colArr[ii].isPrimaryKey) {
             colNameVals.push({
                 colName: colArr[ii].name,
                 //colValue: $(this)[0].cells[ii].textContent

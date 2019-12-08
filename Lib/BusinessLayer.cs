@@ -40,7 +40,7 @@ namespace DataViewer.Lib
                                     Operators.IN, Operators.NOT_IN, Operators.LIKE};
         }
 
-        public List<ColumnInfo> GetColumns(string table)
+        public List<JQDTFriendlyColumnInfo> GetColumns(string table)
         {
             return _dataAccess.GetColumns(table);
         }
@@ -49,7 +49,7 @@ namespace DataViewer.Lib
         public string CompatibleColumnsForSelect(string table)
         {
             string columns = "";
-            foreach(ColumnInfo item in  GetColumns(table))
+            foreach(JQDTFriendlyColumnInfo item in  GetColumns(table))
             {
                 columns += (columns != "" ? ", " : "") + item.name;
             }
@@ -75,23 +75,36 @@ namespace DataViewer.Lib
         private DataTable EntitySqlToDtForFrontEnd(string entityName, string sql, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
         {
             DataTable dt = _dataAccess.GetData(sql);
-            columnsForFrontEnd = dt.JQDTFriendlyColumnList();
-
             // set primary key columns in columnsForFrontEnd
-            List<ColumnInfo> dbCols = _dataAccess.GetColumns(entityName);
-            foreach (ColumnInfo col in dbCols.Where(o => o.isPrimaryKey))
-            {
-                var match = columnsForFrontEnd.First(o => o.name == col.name);
-                match.isPrimary = true;
-            }
-
+            List<JQDTFriendlyColumnInfo> dbCols = _dataAccess.GetColumns(entityName);
+            columnsForFrontEnd = dbCols;
             return dt;
         }
 
+        //// returns jquery datatables friendly list of columns
+        //private List<JQDTFriendlyColumnInfo> JQDTFriendlyColumnList(DataTable dt)
+        //{
+        //    List<JQDTFriendlyColumnInfo> list = new List<JQDTFriendlyColumnInfo>();
+        //    foreach (DataColumn col in dt.Columns)
+        //    {
+        //        if (Type.GetTypeCode(col.DataType).IsNumericColumn())
+        //        {
+        //            list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, ColumnTypeToCategory(col.DataType) AppConst.JQDT_COL_ALIGN.RIGHT));
+        //        }
+        //        else
+        //        {
+        //            list.Add(new JQDTFriendlyColumnInfo(col.ColumnName));
+        //        }
+
+        //    }
+        //    return list;
+        //}
+
+
         public DataTable GetParentOrChildData(RelatedDataSelectModel model, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
         {
-            List<ColumnInfo> fromEntityCols = _dataAccess.GetColumns(model.fromEntity);
-            List<ColumnInfo> toEntityCols = _dataAccess.GetColumns(model.toEntity);
+            List<JQDTFriendlyColumnInfo> fromEntityCols = _dataAccess.GetColumns(model.fromEntity);
+            List<JQDTFriendlyColumnInfo> toEntityCols = _dataAccess.GetColumns(model.toEntity);
             string criteria = _dataAccess.ColNameValToCriteria(model.keyVals, fromEntityCols);
             string sql = "SELECT TOP 1 * FROM " + model.fromEntity + " WHERE " + criteria;
             DataTable dt = _dataAccess.GetData(sql);        // get from table row for passed pk values

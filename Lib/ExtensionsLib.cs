@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DataViewer.Models;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -66,25 +67,6 @@ namespace DataViewer.Lib
             return dynamicDt;
         }
 
-        // returns jquery datatables friendly list of columns
-        public static List<JQDTFriendlyColumnInfo> JQDTFriendlyColumnList(this DataTable dt)
-        {
-            List<JQDTFriendlyColumnInfo> list = new List<JQDTFriendlyColumnInfo>();
-            foreach (DataColumn col in dt.Columns)
-            {
-                if (Type.GetTypeCode(col.DataType).IsNumericColumn())
-                {
-                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName, AppConst.JQDT_COL_ALIGN.RIGHT));
-                }
-                else
-                {
-                    list.Add(new JQDTFriendlyColumnInfo(col.ColumnName));
-                }
-
-            }
-            return list;
-        }
-
         public static List<T> ColumnToList<T>(this DataTable dt, int colIndex)
         {
             List<T> data = new List<T>();
@@ -113,21 +95,5 @@ namespace DataViewer.Lib
 
 
     }
-
-    public class JQDTFriendlyColumnInfo
-    {
-        public string data { get; set; }
-        public string name { get; set; }
-        public string className { get; set; }
-        public bool isPrimary { get; set; }
-        public JQDTFriendlyColumnInfo(string colName, string colAlignment = AppConst.JQDT_COL_ALIGN.LEFT)
-        {
-            data = colName;
-            name = colName;
-            className = colAlignment;
-            this.isPrimary = false;
-        }
-    }
-
 }
 

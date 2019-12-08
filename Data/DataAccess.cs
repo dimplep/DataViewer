@@ -10,8 +10,8 @@ namespace DataViewer.Data
     public interface IDataAccess
     {
         DataTable GetData(string sql);
-        List<ColumnInfo> GetColumns(string table);
-        string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<ColumnInfo> cols);
+        List<JQDTFriendlyColumnInfo> GetColumns(string table);
+        string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<JQDTFriendlyColumnInfo> cols);
     }
 
     public class DataAccess : IDataAccess
@@ -70,7 +70,7 @@ namespace DataViewer.Data
 
         // backend dependent
 
-        public virtual List<ColumnInfo> GetColumns(string schemaTable)
+        public virtual List<JQDTFriendlyColumnInfo> GetColumns(string schemaTable)
         {
             // ASSUMED passed parameter has SCHEMA.TABLE name
             string table = JustTableName(schemaTable);
@@ -80,14 +80,15 @@ namespace DataViewer.Data
 
             DataTable dt = SqlToDataTable(sql);
             List<string> pkCols = SqlToDataTable(sql2).ColumnToList<string>(0);  // get pk columns to list
-            List<ColumnInfo> columns = new List<ColumnInfo>();
+            List<JQDTFriendlyColumnInfo> columns = new List<JQDTFriendlyColumnInfo>();
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 string dataCategory = ColumnTypeToCategory(dt.Rows[i].Field<string>(1));
 
                 if (dataCategory != AppConst.Category.OTHER)
                 {
-                    columns.Add(new ColumnInfo(dt.Rows[i].Field<string>(0), dataCategory, pkCols.Contains(dt.Rows[i].Field<string>(0))));
+                    string align = (dataCategory != AppConst.Category.NUMERIC ? AppConst.JQDT_COL_ALIGN.RIGHT : AppConst.JQDT_COL_ALIGN.LEFT);
+                    columns.Add(new JQDTFriendlyColumnInfo(dt.Rows[i].Field<string>(0), dataCategory, pkCols.Contains(dt.Rows[i].Field<string>(0)), align));
                 }
             }
 
@@ -135,7 +136,7 @@ namespace DataViewer.Data
         }
 
         // returns criteria string (that can used in where)
-        public virtual string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<ColumnInfo> cols)
+        public virtual string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<JQDTFriendlyColumnInfo> cols)
         {
             string criteria = "";
             foreach(ColNameValueModel pair in colNameVals)
@@ -171,19 +172,6 @@ namespace DataViewer.Data
             }
 
             return dataAccess;
-        }
-    }
-
-    public class ColumnInfo
-    {
-        public string name { get; set; }
-        public bool isPrimaryKey { get; set; }
-        public string category { get; set; }       // basic category/group of data (e.g. text, date, number, logical)
-        public ColumnInfo(string name, string category, bool isPrimaryKey)
-        {
-            this.name = name;
-            this.category = category;
-            this.isPrimaryKey = isPrimaryKey;
         }
     }
 }

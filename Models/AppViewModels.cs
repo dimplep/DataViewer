@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataViewer.Lib;
 
 namespace DataViewer.Models
 {
@@ -45,5 +46,22 @@ namespace DataViewer.Models
         public string colValue { set; get; }
 
     }
+
+    public class JQDTFriendlyColumnInfo
+    {
+        public string name { get; set; }
+        public string data { get; set; }
+        public bool isPrimaryKey { get; set; }
+        public string category { get; set; }
+        public string className { get; set; }
+        public JQDTFriendlyColumnInfo(string name, string category, bool isPrimaryKey = false, string colAlignment = AppConst.JQDT_COL_ALIGN.LEFT)
+        {
+            this.name = data = name;
+            this.category = category;
+            className = colAlignment;
+            this.isPrimaryKey = isPrimaryKey;
+        }
+    }
+
 
 }
