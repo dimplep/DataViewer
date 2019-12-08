@@ -42,8 +42,6 @@ var allOperators;       // all possible operators
 var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 
-var mainTableKeyVals;           // store main table selected row's key/value array until figure out how to retrieve table object by table id
-
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
@@ -63,27 +61,12 @@ $(document).ready(function () {
         var tableId = '#' + $(this).closest('table').attr('id');
 
         if (tableId === mainDataTableId) {
-            var selectedRowCount = $(mainDataTableId).DataTable().rows({ selected: true }).count();
+            var selectedRowCount = $(tableId).DataTable().rows({ selected: true }).count();
 
             if (selectedRowCount > 0) {
                 // if selected
 
-                // loop through columns, find primary key values and create json
-
-                var indexOfArr = jqDtNameArr.indexOf(tableId);
-                var colArr = jqDtColArr[indexOfArr];
-                var colNameVals = [];
-                var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
-                for (var ii = 0; ii < colArr.length; ii++) {
-                    if (colArr[ii].isPrimary) {
-                        colNameVals.push({
-                            colName: colArr[ii].name,
-                            //colValue: $(this)[0].cells[ii].textContent
-                            colValue: selectedRow[colArr[ii].name]
-                        });
-                    }
-                }
-                
+                var colNameVals = selectedRowPkColAndValues(tableId);
 
                 var data =
                 {
@@ -92,11 +75,8 @@ $(document).ready(function () {
                     hideChilEntitiesWhenNoData: $(hideIfNoDataCheck).prop("checked")
                 };
 
-                // store in global var for later use
-                mainTableKeyVals = colNameVals;
-
                 //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
-                postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
+                postJsonAsync(mainTableRowSelectUrl, data, setupParentChildSections);
             }
             else {
                 // unselected row
@@ -116,6 +96,26 @@ $(document).ready(function () {
 
 });
 
+// assumed a row is selected
+function selectedRowPkColAndValues(tableId) {
+    // loop through columns, find primary key values and create json
+    var indexOfArr = jqDtNameArr.indexOf(tableId);
+    var colArr = jqDtColArr[indexOfArr];
+    var colNameVals = [];
+    var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
+    for (var ii = 0; ii < colArr.length; ii++) {
+        if (colArr[ii].isPrimary) {
+            colNameVals.push({
+                colName: colArr[ii].name,
+                //colValue: $(this)[0].cells[ii].textContent
+                colValue: selectedRow[colArr[ii].name]
+            });
+        }
+    }
+
+    return colNameVals;
+}
+
 function setupParentChildSections(data, textStatus, xhr) {
     // fill parent / child table selects
     fillSelect($(parentTableSelect), data.parentEntities, true);
@@ -130,11 +130,11 @@ function parentEntityChange(entity) {
             fromEntity: $(mainTableSelect).val(),
             toEntity: entity,
             toEntityType: RELATION_PARENT,
-            keyVals: mainTableKeyVals,
+            keyVals: selectedRowPkColAndValues(mainDataTableId),
             topN: $(topNText).val()
         };
 
-        postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupParentDataTable);
+        postJsonAsync(parentOrChildGetData, data, setupParentDataTable);
     }
     else {
         clearTable(parentDataTableId);
@@ -158,11 +158,11 @@ function childEntityChange(entity) {
             fromEntity: $(mainTableSelect).val(),
             toEntity: entity,
             toEntityType: RELATION_CHILD,
-            keyVals: mainTableKeyVals,
+            keyVals: selectedRowPkColAndValues(mainDataTableId),
             topN: $(topNText).val()
         };
 
-        postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupChildDataTable);
+        postJsonAsync(parentOrChildGetData, data, setupChildDataTable);
     }
     else {
         clearTable(childDataTableId);
@@ -358,7 +358,7 @@ function postJsonAsync(url, model, callback) {
     $.ajax({
         type: "POST",
         url: url,
-        data: model,
+        data: JSON.stringify(model),
         dataType: 'json',
         contentType: "application/json;charset=utf-8",
         success: callback,
