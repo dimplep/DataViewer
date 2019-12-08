@@ -19,14 +19,14 @@ const RELATION_PARENT = "Parent";
 const RELATION_CHILD = "Child";
 
 // UI elements
-var mainTableSelect = '#mainTableSelect';
+var mainEntitySelect = '#mainEntitySelect';
 var columnSelect = '#columnSelect';
 var operatorSelect = '#operatorSelect';
 var columnFilterText = '#columnFilterText';
 var filterCriteriaTextArea = '#filterCriteriaTextArea';
 var topNText = "#topNText";
-var parentTableSelect = "#parentTableSelect";
-var childTableSelect = "#childTableSelect";
+var parentEntitySelect = "#parentEntitySelect";
+var childEntitySelect = "#childEntitySelect";
 var hideIfNoDataCheck = '#hideIfNoDataCheck';
 var childNavigateFromBtn = '#childNavigateFromBtn';
 var parentNavigateFromBtn = '#parentNavigateFromBtn';
@@ -48,8 +48,8 @@ var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 /* MVC urls */
 var initialScreenDataUrl = '/Home/InitialScreenData';
 var getColumnsUrl = "/Home/GetColumns";
-var mainTableDataGetUrl = "/Home/MainTableDataFetch";
-var mainTableRowSelectUrl = "/Home/MainTableRowSelect";
+var mainEntityDataGetUrl = "/Home/MainEntityDataFetch";
+var mainEntityRowSelectUrl = "/Home/MainEntityRowSelect";
 var parentOrChildGetData = "/Home/ParentOrChildGetData";
 
 $(document).ready(function () {
@@ -73,18 +73,18 @@ $(document).ready(function () {
 
                 var data =
                 {
-                    table: $(mainTableSelect).val(),
+                    table: $(mainEntitySelect).val(),
                     colNameVals: colNameVals,
                     hideChilEntitiesWhenNoData: $(hideIfNoDataCheck).prop("checked")
                 };
 
                 //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
-                postJsonAsync(mainTableRowSelectUrl, data, setupParentChildSections);
+                postJsonAsync(mainEntityRowSelectUrl, data, setupParentChildSections);
             }
             else {
                 // unselected row
-                $(parentTableSelect).empty();
-                $(childTableSelect).empty();
+                $(parentEntitySelect).empty();
+                $(childEntitySelect).empty();
             }
 
             // clear parent, child tables
@@ -104,14 +104,22 @@ $(document).ready(function () {
 });
 
 function navigateFromChild() {
-    var pkCriteria = primaryKeyCriteriaForSelectedRow(childDataTableId)
-
+    navigateFromParentOrChild(childDataTableId, childEntitySelect);
 }
 
 function navigateFromParent() {
-    var pkCriteria = primaryKeyCriteriaForSelectedRow(parentDataTableId);
+    navigateFromParentOrChild(parentDataTableId, parentEntitySelect);
 }
 
+function navigateFromParentOrChild(tableId, selectId) {
+    var newMainEntity = $(selectId).val();
+    var pkCriteria = primaryKeyCriteriaForSelectedRow(tableId);
+    $(filterCriteriaTextArea).val(pkCriteria);
+
+    $(mainEntitySelect).val(newMainEntity);
+    mainEntityChanged(newMainEntity, true);
+    getMainEntityData();
+}
 
 
 // according to table row selected will refresh (enable/disable) navigation button
@@ -157,8 +165,8 @@ function selectedRowPkColAndValues(tableId) {
 
 function setupParentChildSections(data, textStatus, xhr) {
     // fill parent / child table selects
-    fillSelect($(parentTableSelect), data.parentEntities, true);
-    fillSelect($(childTableSelect), data.childEntities, true);
+    fillSelect($(parentEntitySelect), data.parentEntities, true);
+    fillSelect($(childEntitySelect), data.childEntities, true);
 }
 
 function parentEntityChange(entity) {
@@ -166,7 +174,7 @@ function parentEntityChange(entity) {
 
         var data =
         {
-            fromEntity: $(mainTableSelect).val(),
+            fromEntity: $(mainEntitySelect).val(),
             toEntity: entity,
             toEntityType: RELATION_PARENT,
             keyVals: selectedRowPkColAndValues(mainDataTableId),
@@ -195,7 +203,7 @@ function childEntityChange(entity) {
     if (entity !== '') {
         var data =
         {
-            fromEntity: $(mainTableSelect).val(),
+            fromEntity: $(mainEntitySelect).val(),
             toEntity: entity,
             toEntityType: RELATION_CHILD,
             keyVals: selectedRowPkColAndValues(mainDataTableId),
@@ -216,7 +224,7 @@ function setupChildDataTable(data, textStatus, xhr) {
 }
 
 function setupInitialScreen(data, textStatus, xhr) {
-    fillSelect($(mainTableSelect), data.allTables);
+    fillSelect($(mainEntitySelect), data.allTables);
     //columnInfoArr = data.columns;
     var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
     jqDtColArr[indexOfArr] = data.columns;
@@ -261,7 +269,7 @@ function appendFilter() {
     $(filterCriteriaTextArea).val(filterCriteria);
 }
 
-function addCriteria(currentCriteria, selectedColumn, selectedOperator, filterText) {
+function addCriteria(currentCriteria, selectedColumn, category, selectedOperator, filterText) {
     if (selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL) {
         newFilter = selectedColumn + " " + selectedOperator;
     } else if (selectedOperator === OPERATOR_IN || selectedOperator === OPERATOR_NOT_IN) {
@@ -295,7 +303,7 @@ function primaryKeyCriteriaForSelectedRow(tableId) {
     var selectedRow = $(tableId).DataTable().rows({ selected: true }).data()[0];
     for (var ii = 0; ii < colArr.length; ii++) {
         if (colArr[ii].isPrimaryKey) {
-            filterCriteria = addCriteria(filterCriteria, colArr[ii].name, '=', selectedRow[colArr[ii].name]);
+            filterCriteria = addCriteria(filterCriteria, colArr[ii].name, colArr[ii].category, '=', selectedRow[colArr[ii].name]);
         }
     }
 
@@ -317,8 +325,8 @@ function primaryKeyCriteriaForSelectedRow(tableId) {
 //}
 
 
-function mainTableChanged(newTable) {
-    var data = { table: $(mainTableSelect).val() };
+function mainEntityChanged(newTable, leaveCriteriaTextAlone) {
+    var data = { table: $(mainEntitySelect).val() };
     var result = getJsonSync(getColumnsUrl, data);
     //columnInfoArr = result.columns;
     var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
@@ -326,9 +334,17 @@ function mainTableChanged(newTable) {
 
     fillSelectByProperty($(columnSelect), result.columns, COLUMN_INFO_NAME);
     columnSelectionChanged($(columnSelect).val());
-    //$(filterCriteriaTextArea).val("");
-
+    setSectionsAfterEntityChange(leaveCriteriaTextAlone);
 }
+
+
+function setSectionsAfterEntityChange(leaveCriteriaTextAlone) {
+    if (!leaveCriteriaTextAlone) {
+        $(filterCriteriaTextArea).val("");
+    }
+    clearParentChildSections();
+}
+
 //function FillMainSelect(data, textStatus, xhr) {
 //    FillSelect($('#mainTableSelect'), data);
 //}
@@ -345,15 +361,18 @@ function mainTableChanged(newTable) {
 //}
 
 // get main table data using main table and filter criteria
-function getMainTableData() {
-    var model = { table: $(mainTableSelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
+function getMainEntityData() {
+    var model = { table: $(mainEntitySelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
     //clearJQTableHeader(mainDataTableId);
-    var result = getJsonSync(mainTableDataGetUrl, model);
+    var result = getJsonSync(mainEntityDataGetUrl, model);
     fillJQTable(result, mainDataTableId);
+    clearParentChildSections();
+}
 
+function clearParentChildSections() {
     // clear parent/child selects, tables
-    $(parentTableSelect).empty();
-    $(childTableSelect).empty();
+    $(parentEntitySelect).empty();
+    $(childEntitySelect).empty();
     clearTable(childDataTableId);
     clearTable(parentDataTableId);
 }

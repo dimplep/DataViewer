@@ -6,7 +6,7 @@ using DataViewer.Lib;
 
 namespace DataViewer.Models
 {
-    public class MainTableDataFetchModel
+    public class EntityDataFetchModel
     {
         public string table { set; get; }
         private string _criteria;

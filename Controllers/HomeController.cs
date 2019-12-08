@@ -54,7 +54,7 @@ namespace DataViewer.Controllers
         //}
 
         [HttpGet]
-        public IActionResult MainTableDataFetch(MainTableDataFetchModel model)
+        public IActionResult MainEntityDataFetch(EntityDataFetchModel model)
         {
             List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
             DataTable dt = _businessLayer.GetTableCriteriaData(model.table, model.criteria, model.topN, ref columnsForFrontEnd);
@@ -65,7 +65,7 @@ namespace DataViewer.Controllers
 
 
         [HttpPost]
-        public IActionResult MainTableRowSelect([FromBody] MainTableRowSelectModel model)
+        public IActionResult MainEntityRowSelect([FromBody] MainTableRowSelectModel model)
         {
 
             return Json(new { parentEntities = _businessLayer.GetParentEntities(model), childEntities = _businessLayer.GetChildEntities(model) });
