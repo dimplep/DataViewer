@@ -13,7 +13,7 @@
                             <label for="mainTableSelect">Table: </label>
                         </td>
                         <td class="fitwidth">
-                            <select id="mainTableSelect" onchange="tableChanged(this.value);" />
+                            <select id="mainTableSelect" onchange="mainTableChanged(this.value);" />
                         </td>
                         <td class="fitwidth">
                             <label for="columnSelect">Column: </label>
@@ -37,7 +37,7 @@
                             <input type="text" id="columnFilterText" class="form-control" />
                         </td>
                         <td align="right" class="fitwidth">
-                            <input type="button" id="AddFilterBtn" value="Add" class="btn-secondary" onclick="addFilter();" />
+                            <input type="button" id="AddFilterBtn" value="Add" class="btn-secondary" onclick="appendFilter();" />
                         </td>
                     </tr>
                 </tbody>

@@ -40,7 +40,7 @@ var parentDataTableId = "#parentDataTable";
 var category;
 
 // page global variables
-var columnInfoArr;     // stores main entity available columns for filter
+//var columnInfoArr;     // stores main entity available columns for filter
 var allOperators;       // all possible operators
 var jqDtColArr = [ null, null, null];   // stores datatable column info into array (so primary key columns can be queried)
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
@@ -217,7 +217,11 @@ function setupChildDataTable(data, textStatus, xhr) {
 
 function setupInitialScreen(data, textStatus, xhr) {
     fillSelect($(mainTableSelect), data.allTables);
-    columnInfoArr = data.columns;
+    //columnInfoArr = data.columns;
+    var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
+    jqDtColArr[indexOfArr] = data.columns;
+
+
     allOperators = data.operators;
     fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
     fillSelect($(operatorSelect), data.operators);
@@ -246,34 +250,44 @@ function toSQLInCompatible(value, isNumeric) {
     });
     return "(" + result + ")";
 }
-function addFilter() {
+function appendFilter() {
     var newFilter = "";
     var filterCriteria = $(filterCriteriaTextArea).val();
+    var selectedColumn = $(columnSelect).val();
     var selectedOperator = $(operatorSelect).val();
     var filterText = $(columnFilterText).val();
 
+    filterCriteria = AddCriteria(filterCriteria, selectedColumn, selectedOperator, filterText);
+    
+    $(filterCriteriaTextArea).val(filterCriteria);
+}
+
+function AddCriteria(currentCriteria, selectedColumn, selectedOperator, filterText) {
     if (selectedOperator === OPERATOR_IS_NULL || selectedOperator === OPERATOR_IS_NOT_NULL) {
-        newFilter = $(columnSelect).val() + " " + selectedOperator;
+        newFilter = selectedColumn + " " + selectedOperator;
     } else if (selectedOperator === OPERATOR_IN || selectedOperator === OPERATOR_NOT_IN) {
         filterText = toSQLInCompatible(filterText, category === COLUMN_CATEGORY_NUMERIC);
-        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
+        newFilter = selectedColumn + " " + selectedOperator + " " + filterText;
     } else if (selectedOperator === OPERATOR_LIKE) {
         if (filterText.indexOf("%") < 0) {
             filterText = filterText + "%";   // add % if user did not entered, otherwise leave it alone
         }
         filterText = "'" + filterText + "'";
-        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
+        newFilter = selectedColumn + " " + selectedOperator + " " + filterText;
     }
     else {
         if (category !== COLUMN_CATEGORY_NUMERIC) {
             filterText = "'" + filterText + "'";
         }
-        newFilter = $(columnSelect).val() + " " + selectedOperator + " " + filterText;
+        newFilter = selectedColumn + " " + selectedOperator + " " + filterText;
     }
 
-    filterCriteria = filterCriteria + (filterCriteria === "" ? "" : " AND ") + newFilter;
-    $(filterCriteriaTextArea).val(filterCriteria);
+    filterCriteria = currentCriteria + (currentCriteria === "" ? "" : " AND ") + newFilter;
+
+    return filterCriteria;
 }
+
+
 
 //function AddFilter() {
 //    var newFilter = $(columnFilterText).val();
@@ -290,11 +304,14 @@ function addFilter() {
 //}
 
 
-function tableChanged(newTable) {
+function mainTableChanged(newTable) {
     var data = { table: $(mainTableSelect).val() };
     var result = getJsonSync(getColumnsUrl, data);
-    columnInfoArr = result.columns;
-    fillSelectByProperty($(columnSelect), columnInfoArr, COLUMN_INFO_NAME);
+    //columnInfoArr = result.columns;
+    var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
+    jqDtColArr[indexOfArr] = result.columns;
+
+    fillSelectByProperty($(columnSelect), result.columns, COLUMN_INFO_NAME);
     columnSelectionChanged($(columnSelect).val());
     //$(filterCriteriaTextArea).val("");
 
@@ -468,7 +485,9 @@ function columnSelectionChanged(val) {
 
 function setupWhenColumnChanged(colName) {
     // find data type
-    category = searchArray(columnInfoArr, colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+    var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
+
+    category = searchArray(jqDtColArr[indexOfArr], colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
     var newCopy = JSON.parse(JSON.stringify(allOperators));
     if (category !== COLUMN_CATEGORY_TEXT) {
         // remove 'like'
