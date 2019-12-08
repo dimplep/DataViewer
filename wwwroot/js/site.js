@@ -90,6 +90,10 @@ $(document).ready(function () {
 
             //FillJQTable(childDataTableId, mainTableRowSelectUrl, JSON.stringify(model));
             postJsonAsync(mainTableRowSelectUrl, JSON.stringify(data), setupParentChildSections);
+
+            // clear parent, child tables
+            clearTable(childDataTableId);
+            clearTable(parentDataTableId);
         }
     });
 
@@ -106,16 +110,22 @@ function setupParentChildSections(data, textStatus, xhr) {
 }
 
 function parentEntityChange(entity) {
-    var data =
-    {
-        fromEntity: $(mainTableSelect).val(),
-        toEntity: entity,
-        toEntityType: RELATION_PARENT,
-        keyVals: mainTableKeyVals,
-        topN: $(topNText).val()
-    };
+    if (entity !== '') {
 
-    postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupParentDataTable);
+        var data =
+        {
+            fromEntity: $(mainTableSelect).val(),
+            toEntity: entity,
+            toEntityType: RELATION_PARENT,
+            keyVals: mainTableKeyVals,
+            topN: $(topNText).val()
+        };
+
+        postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupParentDataTable);
+    }
+    else {
+        clearTable(parentDataTableId);
+    }
 }
 
 function setupParentDataTable(data, textStatus, xhr) {
@@ -124,16 +134,21 @@ function setupParentDataTable(data, textStatus, xhr) {
 
 
 function childEntityChange(entity) {
-    var data =
-    {
-        fromEntity: $(mainTableSelect).val(),
-        toEntity: entity,
-        toEntityType: RELATION_CHILD,
-        keyVals: mainTableKeyVals,
-        topN: $(topNText).val()
-    };
+    if (entity !== '') {
+        var data =
+        {
+            fromEntity: $(mainTableSelect).val(),
+            toEntity: entity,
+            toEntityType: RELATION_CHILD,
+            keyVals: mainTableKeyVals,
+            topN: $(topNText).val()
+        };
 
-    postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupChildDataTable);
+        postJsonAsync(parentOrChildGetData, JSON.stringify(data), setupChildDataTable);
+    }
+    else {
+        clearTable(childDataTableId);
+    }
 
 }
 
