@@ -28,6 +28,9 @@ var topNText = "#topNText";
 var parentTableSelect = "#parentTableSelect";
 var childTableSelect = "#childTableSelect";
 var hideIfNoDataCheck = '#hideIfNoDataCheck';
+var childNavigateFromBtn = '#childNavigateFromBtn';
+var parentNavigateFromBtn = '#parentNavigateFromBtn';
+
 
 // jquery datatables
 var mainDataTableId = "#mainDataTable";
@@ -88,6 +91,10 @@ $(document).ready(function () {
             clearTable(childDataTableId);
             clearTable(parentDataTableId);
         }
+        else {
+            RefreshNavigationBtnForTable(tableId);
+        }
+
     });
 
     //$(tableName + ' tbody').on('click', 'tr', function () {
@@ -95,6 +102,27 @@ $(document).ready(function () {
     //});
 
 });
+
+// according to table row selected will refresh (enable/disable) navigation button
+function RefreshNavigationBtnForTable(tableId) {
+    var disable = true;
+    if ($.fn.dataTable.isDataTable(tableId)) {
+        disable = $(tableId).DataTable().rows({ selected: true }).count() <= 0;
+    }
+    
+    var btnId = "";
+    if (tableId === childDataTableId) {
+        btnId = '#childNavigateFromBtn';
+    }
+    else {
+        btnId = '#parentNavigateFromBtn';
+    }
+    DisableNavigationFromBtn(btnId, disable);
+}
+
+function DisableNavigationFromBtn(btnId, disable) {
+    $(btnId).prop('disabled', disable);
+}
 
 // assumed a row is selected
 function selectedRowPkColAndValues(tableId) {
@@ -139,6 +167,7 @@ function parentEntityChange(entity) {
     else {
         clearTable(parentDataTableId);
     }
+    RefreshNavigationBtnForTable(parentDataTableId);
 }
 
 function setupParentDataTable(data, textStatus, xhr) {
@@ -168,6 +197,7 @@ function childEntityChange(entity) {
         clearTable(childDataTableId);
     }
 
+    RefreshNavigationBtnForTable(childDataTableId);
 }
 
 function setupChildDataTable(data, textStatus, xhr) {
@@ -184,6 +214,9 @@ function setupInitialScreen(data, textStatus, xhr) {
     // set gui for first column
     //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
     columnSelectionChanged($(columnSelect).val());
+
+    RefreshNavigationBtnForTable(childDataTableId);
+    RefreshNavigationBtnForTable(parentDataTableId);
 }
 
 function operatorChanged() {
@@ -282,7 +315,6 @@ function getMainTableData() {
     $(childTableSelect).empty();
     clearTable(childDataTableId);
     clearTable(parentDataTableId);
-
 }
 
 function fillJQTable(result, tableName) {
