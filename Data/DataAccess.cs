@@ -30,7 +30,15 @@ namespace DataViewer.Data
         {
             get
             {
-                return new List<string> { "bit", "int", "money", "numeric", "decimal" };
+                return new List<string> { "int", "money", "numeric", "decimal" };
+            }
+        }
+
+        public virtual List<string> BooleanCategoryKeywords
+        {
+            get
+            {
+                return new List<string> { "bit" };
             }
         }
 
@@ -126,6 +134,10 @@ namespace DataViewer.Data
             else if (DateCategoryKeywords.Exists(listElement => dataType.Contains(listElement)))
             {
                 dataCategory = AppConst.Category.DATE;
+            }
+            else if (BooleanCategoryKeywords.Exists(listElement => dataType.Contains(listElement)))
+            {
+                dataCategory = AppConst.Category.BOOLEAN;
             }
             else
             {

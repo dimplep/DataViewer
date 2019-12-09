@@ -1,7 +1,8 @@
-﻿/* html component ids */
+﻿/* backend data categories */
 const COLUMN_CATEGORY_TEXT = "text";      // text, str, char etc.
 const COLUMN_CATEGORY_NUMERIC = "numeric";  // int, decimal, float, bit etc.
 const COLUMN_CATEGORY_DATE = "date";      // date, datetime, time etc.
+const COLUMN_CATEGORY_BOOLEAN = "bool";      // bit
 
 // column info (returned from MVC) properties
 const COLUMN_INFO_NAME = "name";
@@ -36,8 +37,6 @@ var parentNavigateFromBtn = '#parentNavigateFromBtn';
 var mainDataTableId = "#mainDataTable";
 var childDataTableId = "#childDataTable";
 var parentDataTableId = "#parentDataTable";
-
-var category;
 
 // page global variables
 //var columnInfoArr;     // stores main entity available columns for filter
@@ -264,8 +263,10 @@ function appendFilter() {
     var selectedOperator = $(operatorSelect).val();
     var filterText = $(columnFilterText).val();
 
-    filterCriteria = addCriteria(filterCriteria, selectedColumn, selectedOperator, filterText);
-    
+    var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
+    var category = searchArray(jqDtColArr[indexOfArr], selectedColumn, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+
+    filterCriteria = addCriteria(filterCriteria, selectedColumn, category, selectedOperator, filterText);
     $(filterCriteriaTextArea).val(filterCriteria);
 }
 
@@ -283,7 +284,7 @@ function addCriteria(currentCriteria, selectedColumn, category, selectedOperator
         newFilter = selectedColumn + " " + selectedOperator + " " + filterText;
     }
     else {
-        if (category !== COLUMN_CATEGORY_NUMERIC) {
+        if (category !== COLUMN_CATEGORY_NUMERIC && category !== COLUMN_CATEGORY_BOOLEAN) {
             filterText = "'" + filterText + "'";
         }
         newFilter = selectedColumn + " " + selectedOperator + " " + filterText;
@@ -519,7 +520,7 @@ function setupWhenColumnChanged(colName) {
     // find data type
     var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
 
-    category = searchArray(jqDtColArr[indexOfArr], colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
+    var category = searchArray(jqDtColArr[indexOfArr], colName, COLUMN_INFO_NAME, COLUMN_INFO_CATEGORY);
     var newCopy = JSON.parse(JSON.stringify(allOperators));
     if (category !== COLUMN_CATEGORY_TEXT) {
         // remove 'like'

@@ -57,6 +57,9 @@ namespace DataViewer.Lib
                                 dict[column.ColumnName] = "";
                             }
                             break;
+                        case TypeCode.Boolean:
+                            dict[column.ColumnName] = (row.Field<bool>(column) ? 1 : 0);
+                            break;
                         default:
                             dict[column.ColumnName] = row[column];
                             break;
