@@ -2,8 +2,8 @@
     ViewData["Title"] = "Data Viewer";
 }
 
-    <div class="container" style="padding:5px">
-        <h4>Main Table and Filters</h4>
+    <div class="container border" style="padding:5px">
+        <h4>Main Entity and Filters</h4>
 
         <div class="table-responsive">
             <table class="table">
@@ -73,20 +73,20 @@
         </div>
     </div>
 
-<div class="container" style="padding:5px">
+<div class="container border" style="padding:5px">
     <h4>Child Relations</h4>
     <div class="row" style="padding:7px">
-        <div class="col-md-4">
+        <div class="col-md-7">
             <label for="childEntitySelect">Child: </label>
             <select id="childEntitySelect" onchange="childEntityChange(this.value)">
             </select>
         </div>
-        <div class="col-md-6">
-            <input type="button" id="childNavigateFromBtn" value="Navigate From Selected Row" class="btn-secondary" onclick="navigateFromChild();" />
-        </div>
-        <div class="col-md-2" align="right">
+        <div class="col-md-2" align="left">
             <label for="hideIfNoDataCheck">Hide if no data: </label>
             <input type="checkbox" id="hideIfNoDataCheck" checked />
+        </div>
+        <div class="col-md-3" align="right">
+            <input type="button" id="childNavigateFromBtn" value="Navigate From Selected Row" class="btn-secondary" onclick="navigateFromChild();" />
         </div>
     </div>
     <div class="table-responsive">
@@ -97,15 +97,15 @@
     </div>
 </div>
 
-<div class="container" style="padding:5px">
+<div class="container border" style="padding:5px">
     <h4>Parent Relations</h4>
     <div class="row" style="padding:7px">
-        <div class="col-md-4">
+        <div class="col-md-9">
             <label for="parentEntitySelect">Parent: </label>
             <select id="parentEntitySelect" onchange="parentEntityChange(this.value)">
             </select>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-3" align="right">
             <input type="button" id="parentNavigateFromBtn" value="Navigate From Selected Row" class="btn-secondary" onclick="navigateFromParent();" />
         </div>
     </div>
