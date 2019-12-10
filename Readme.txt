@@ -1,3 +1,7 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+SQL SERVER
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 SQL SERVER Schema info ref: https://dataedo.com/kb/query/sql-server/list-table-columns-with-their-foreign-keys
 
 select schema_name(tab.schema_id) + '.' + tab.name as ChildTable,
@@ -25,3 +29,7 @@ order by schema_name(tab.schema_id) + '.' + tab.name,
 /*
 	To convert result to json you may use free online tool like https://www.csvjson.com/csv2json
 */
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+MYSQL
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -1,0 +1,55 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using MySql.Data.MySqlClient;
+using DataViewer.Lib;
+
+//using Microsoft.SqlServer.Types;
+
+namespace DataViewer.Data
+{
+    // SQL SERVER DATA ACCESS
+    public class MYSQLDataAccess : SQLDataAccess
+    {
+        public override string PrimaryKeysSql
+
+        {
+            get
+            {
+
+                throw new NotImplementedException();      // <-- return primary key sql for mysql
+            }
+        }
+
+
+        public MYSQLDataAccess(string connectionString) : base(connectionString)
+        {
+        }
+
+        public override DataTable GetData(string sql)
+        {
+            return SqlToDataTable(sql);
+        }
+
+        public override DataTable SqlToDataTable(string sql)
+        {
+            DataTable dt = new DataTable();
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                conn.Open();
+
+                // create data adapter
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                // this will query your database and return the result to your datatable
+                da.Fill(dt);
+                cmd.Dispose();
+                conn.Close();
+                da.Dispose();
+            }
+
+            return dt;
+        }
+
+    }
+}

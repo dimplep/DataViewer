@@ -5,6 +5,14 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Data\MYSQLDataAccess.cs_" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Data\MYSQLDataAccess.cs_" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.4.1" />
@@ -14,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
     <PackageReference Include="Microsoft.SqlServer.Types" Version="14.0.1016.290" />
+    <PackageReference Include="MySql.Data" Version="8.0.18" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
