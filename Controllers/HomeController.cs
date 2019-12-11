@@ -23,7 +23,6 @@ namespace DataViewer.Controllers
             string connStr = op.Value.ConnectionString;
             string dbms = op.Value.RDBMS;
             string relationsJsonFileName = op.Value.RelationsJsonFileName;
-            
             _dataAccess = DataSwitcher.DataAccessByDBMS(connStr, dbms);
             _businessLayer = new BusinessLayer(_dataAccess, relationsJsonFileName);
         }

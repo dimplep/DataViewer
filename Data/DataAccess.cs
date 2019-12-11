@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
+
 namespace DataViewer.Data
 {
     public interface IDataAccess
@@ -12,6 +13,7 @@ namespace DataViewer.Data
         DataTable GetData(string sql);
         List<JQDTFriendlyColumnInfo> GetColumns(string table);
         string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<JQDTFriendlyColumnInfo> cols);
+        string BuildBasicSql(string cols, string from, string where, int topN);
     }
 
     public class DataAccess : IDataAccess
@@ -103,13 +105,20 @@ namespace DataViewer.Data
             return columns;
         }
 
+        public virtual string BuildBasicSql(string cols, string from, string where, int topN)
+        {
+            string sql = "SELECT TOP " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N) + " " + cols + " FROM " + from + (where != "" ? " WHERE " + where : "");
+            return sql;
+
+        }
+
 
         public virtual string JustTableName(string schemaTable)
         {
             string table = schemaTable;
-            if (table.IndexOf(".") >= 0)
+            if (table.IndexOf(".", StringComparison.Ordinal) >= 0)
             {
-                table = table.Substring(table.IndexOf(".") + 1);
+                table = table.Substring(table.IndexOf(".", StringComparison.Ordinal) + 1);
             }
             return table;
         }
@@ -178,6 +187,9 @@ namespace DataViewer.Data
             {
                 case AppConst.DBMS.SQLSERVER:
                     dataAccess = new SQLDataAccess(connectionString);
+                    break;
+                case AppConst.DBMS.MYSQL:
+                    dataAccess = new MYSQLDataAccess(connectionString);
                     break;
                 default:
                     throw new NotImplementedException();

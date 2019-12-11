@@ -1,0 +1,490 @@
+/* MY SQL */
+
+[
+  {
+    "ChildTable": "customeraddress",
+    "ChildKey": "AddressID",
+    "ParentTable": "address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "employeeaddress",
+    "ChildKey": "AddressID",
+    "ParentTable": "address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "BillToAddressID",
+    "ParentTable": "address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "ShipToAddressID",
+    "ParentTable": "address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "vendoraddress",
+    "ChildKey": "AddressID",
+    "ParentTable": "address",
+    "ParentKey": "AddressID"
+  },
+  {
+    "ChildTable": "customeraddress",
+    "ChildKey": "AddressTypeID",
+    "ParentTable": "addresstype",
+    "ParentKey": "AddressTypeID"
+  },
+  {
+    "ChildTable": "vendoraddress",
+    "ChildKey": "AddressTypeID",
+    "ParentTable": "addresstype",
+    "ParentKey": "AddressTypeID"
+  },
+  {
+    "ChildTable": "contactcreditcard",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "employee",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "individual",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "storecontact",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "vendorcontact",
+    "ChildKey": "ContactID",
+    "ParentTable": "contact",
+    "ParentKey": "ContactID"
+  },
+  {
+    "ChildTable": "storecontact",
+    "ChildKey": "ContactTypeID",
+    "ParentTable": "contacttype",
+    "ParentKey": "ContactTypeID"
+  },
+  {
+    "ChildTable": "salesterritory",
+    "ChildKey": "CountryRegionCode",
+    "ParentTable": "countryregion",
+    "ParentKey": "CountryRegionCode"
+  },
+  {
+    "ChildTable": "stateprovince",
+    "ChildKey": "CountryRegionCode",
+    "ParentTable": "countryregion",
+    "ParentKey": "CountryRegionCode"
+  },
+  {
+    "ChildTable": "contactcreditcard",
+    "ChildKey": "CreditCardID",
+    "ParentTable": "creditcard",
+    "ParentKey": "CreditCardID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "CreditCardID",
+    "ParentTable": "creditcard",
+    "ParentKey": "CreditCardID"
+  },
+  {
+    "ChildTable": "productmodelproductdescriptionculture",
+    "ChildKey": "CultureID",
+    "ParentTable": "culture",
+    "ParentKey": "CultureID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "CurrencyRateID",
+    "ParentTable": "currencyrate",
+    "ParentKey": "CurrencyRateID"
+  },
+  {
+    "ChildTable": "customeraddress",
+    "ChildKey": "CustomerID",
+    "ParentTable": "customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "individual",
+    "ChildKey": "CustomerID",
+    "ParentTable": "customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "CustomerID",
+    "ParentTable": "customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "store",
+    "ChildKey": "CustomerID",
+    "ParentTable": "customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "storecontact",
+    "ChildKey": "CustomerID",
+    "ParentTable": "customer",
+    "ParentKey": "CustomerID"
+  },
+  {
+    "ChildTable": "employeedepartmenthistory",
+    "ChildKey": "DepartmentID",
+    "ParentTable": "department",
+    "ParentKey": "DepartmentID"
+  },
+  {
+    "ChildTable": "productdocument",
+    "ChildKey": "DocumentID",
+    "ParentTable": "document",
+    "ParentKey": "DocumentID"
+  },
+  {
+    "ChildTable": "employee",
+    "ChildKey": "ManagerID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "employeeaddress",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "employeedepartmenthistory",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "employeepayhistory",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "jobcandidate",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "purchaseorderheader",
+    "ChildKey": "EmployeeID",
+    "ParentTable": "employee",
+    "ParentKey": "EmployeeID"
+  },
+  {
+    "ChildTable": "productmodelillustration",
+    "ChildKey": "IllustrationID",
+    "ParentTable": "illustration",
+    "ParentKey": "IllustrationID"
+  },
+  {
+    "ChildTable": "productinventory",
+    "ChildKey": "LocationID",
+    "ParentTable": "location",
+    "ParentKey": "LocationID"
+  },
+  {
+    "ChildTable": "workorderrouting",
+    "ChildKey": "LocationID",
+    "ParentTable": "location",
+    "ParentKey": "LocationID"
+  },
+  {
+    "ChildTable": "billofmaterials",
+    "ChildKey": "ProductAssemblyID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "billofmaterials",
+    "ChildKey": "ComponentID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productcosthistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productdocument",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productinventory",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productlistpricehistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productproductphoto",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productreview",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productvendor",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "purchaseorderdetail",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "salesorderdetail",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "shoppingcartitem",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "specialofferproduct",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "transactionhistory",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "transactionhistoryarchive",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "workorder",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "workorderrouting",
+    "ChildKey": "ProductID",
+    "ParentTable": "product",
+    "ParentKey": "ProductID"
+  },
+  {
+    "ChildTable": "productsubcategory",
+    "ChildKey": "ProductCategoryID",
+    "ParentTable": "productcategory",
+    "ParentKey": "ProductCategoryID"
+  },
+  {
+    "ChildTable": "productmodelproductdescriptionculture",
+    "ChildKey": "ProductDescriptionID",
+    "ParentTable": "productdescription",
+    "ParentKey": "ProductDescriptionID"
+  },
+  {
+    "ChildTable": "product",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "productmodel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "productmodelillustration",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "productmodel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "productmodelproductdescriptionculture",
+    "ChildKey": "ProductModelID",
+    "ParentTable": "productmodel",
+    "ParentKey": "ProductModelID"
+  },
+  {
+    "ChildTable": "productproductphoto",
+    "ChildKey": "ProductPhotoID",
+    "ParentTable": "productphoto",
+    "ParentKey": "ProductPhotoID"
+  },
+  {
+    "ChildTable": "product",
+    "ChildKey": "ProductSubcategoryID",
+    "ParentTable": "productsubcategory",
+    "ParentKey": "ProductSubcategoryID"
+  },
+  {
+    "ChildTable": "purchaseorderdetail",
+    "ChildKey": "PurchaseOrderID",
+    "ParentTable": "purchaseorderheader",
+    "ParentKey": "PurchaseOrderID"
+  },
+  {
+    "ChildTable": "salesorderdetail",
+    "ChildKey": "SalesOrderID",
+    "ParentTable": "salesorderheader",
+    "ParentKey": "SalesOrderID"
+  },
+  {
+    "ChildTable": "salesorderheadersalesreason",
+    "ChildKey": "SalesOrderID",
+    "ParentTable": "salesorderheader",
+    "ParentKey": "SalesOrderID"
+  },
+  {
+    "ChildTable": "salespersonquotahistory",
+    "ChildKey": "SalesPersonID",
+    "ParentTable": "salesperson",
+    "ParentKey": "SalesPersonID"
+  },
+  {
+    "ChildTable": "store",
+    "ChildKey": "SalesPersonID",
+    "ParentTable": "salesperson",
+    "ParentKey": "SalesPersonID"
+  },
+  {
+    "ChildTable": "salesorderheadersalesreason",
+    "ChildKey": "SalesReasonID",
+    "ParentTable": "salesreason",
+    "ParentKey": "SalesReasonID"
+  },
+  {
+    "ChildTable": "customer",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "salesterritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "salesterritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "salesperson",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "salesterritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "salesterritoryhistory",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "salesterritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "stateprovince",
+    "ChildKey": "TerritoryID",
+    "ParentTable": "salesterritory",
+    "ParentKey": "TerritoryID"
+  },
+  {
+    "ChildTable": "workorder",
+    "ChildKey": "ScrapReasonID",
+    "ParentTable": "scrapreason",
+    "ParentKey": "ScrapReasonID"
+  },
+  {
+    "ChildTable": "employeedepartmenthistory",
+    "ChildKey": "ShiftID",
+    "ParentTable": "shift",
+    "ParentKey": "ShiftID"
+  },
+  {
+    "ChildTable": "purchaseorderheader",
+    "ChildKey": "ShipMethodID",
+    "ParentTable": "shipmethod",
+    "ParentKey": "ShipMethodID"
+  },
+  {
+    "ChildTable": "salesorderheader",
+    "ChildKey": "ShipMethodID",
+    "ParentTable": "shipmethod",
+    "ParentKey": "ShipMethodID"
+  },
+  {
+    "ChildTable": "salesorderdetail",
+    "ChildKey": "SpecialOfferID",
+    "ParentTable": "specialofferproduct",
+    "ParentKey": "SpecialOfferID"
+  },
+  {
+    "ChildTable": "address",
+    "ChildKey": "StateProvinceID",
+    "ParentTable": "stateprovince",
+    "ParentKey": "StateProvinceID"
+  },
+  {
+    "ChildTable": "productvendor",
+    "ChildKey": "VendorID",
+    "ParentTable": "vendor",
+    "ParentKey": "VendorID"
+  },
+  {
+    "ChildTable": "purchaseorderheader",
+    "ChildKey": "VendorID",
+    "ParentTable": "vendor",
+    "ParentKey": "VendorID"
+  },
+  {
+    "ChildTable": "vendoraddress",
+    "ChildKey": "VendorID",
+    "ParentTable": "vendor",
+    "ParentKey": "VendorID"
+  },
+  {
+    "ChildTable": "workorderrouting",
+    "ChildKey": "WorkOrderID",
+    "ParentTable": "workorder",
+    "ParentKey": "WorkOrderID"
+  }
+]

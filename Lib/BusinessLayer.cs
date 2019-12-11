@@ -62,7 +62,7 @@ namespace DataViewer.Lib
             //columns = dt.JQDTFriendlyColumnList();
             //List<ColumnInfo> cols = GetColumns(table);
 
-            string sql = "SELECT TOP " + (topN > 0 ? topN : DEFAULT_TOP_N) + " " + CompatibleColumnsForSelect(entityName) + " FROM " + entityName + (criteria != "" ? " WHERE " + criteria : "");
+            string sql = _dataAccess.BuildBasicSql("*", entityName, criteria, topN);
 
             if (sql.Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').ToLower().Occurance(" from ") > 1)
             {
@@ -106,7 +106,7 @@ namespace DataViewer.Lib
             List<JQDTFriendlyColumnInfo> fromEntityCols = _dataAccess.GetColumns(model.fromEntity);
             List<JQDTFriendlyColumnInfo> toEntityCols = _dataAccess.GetColumns(model.toEntity);
             string criteria = _dataAccess.ColNameValToCriteria(model.keyVals, fromEntityCols);
-            string sql = "SELECT TOP 1 * FROM " + model.fromEntity + " WHERE " + criteria;
+            string sql = _dataAccess.BuildBasicSql("*", model.fromEntity, criteria, 1);
             DataTable dt = _dataAccess.GetData(sql);        // get from table row for passed pk values
 
             List<ColNameValueModel> colVals;
@@ -121,7 +121,7 @@ namespace DataViewer.Lib
             }
 
             string toCiteria = _dataAccess.ColNameValToCriteria(colVals, toEntityCols);
-            sql = "SELECT TOP " + model.topN.ToString() + " * FROM " + model.toEntity + " WHERE " + toCiteria;
+            sql = _dataAccess.BuildBasicSql("*", model.toEntity, toCiteria, model.topN);
             DataTable toDt = EntitySqlToDtForFrontEnd(model.toEntity, sql, ref columnsForFrontEnd);
 
             return toDt;

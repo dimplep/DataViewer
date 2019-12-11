@@ -17,7 +17,12 @@ namespace DataViewer.Data
             get
             {
 
-                throw new NotImplementedException();      // <-- return primary key sql for mysql
+                return "SELECT k.column_name " +
+                        "FROM information_schema.table_constraints t " +
+                        "JOIN information_schema.key_column_usage k " +
+                        "USING(constraint_name, table_schema, table_name) " +
+                        "WHERE t.constraint_type = 'PRIMARY KEY' " +
+                          "AND t.table_name = '{0}'";
             }
         }
 
@@ -29,6 +34,14 @@ namespace DataViewer.Data
         public override DataTable GetData(string sql)
         {
             return SqlToDataTable(sql);
+        }
+
+        public override string BuildBasicSql(string cols, string from, string where, int topN)
+        {
+            string sql = "SELECT " + cols + " FROM " + from
+                + (where != "" ? " WHERE " + where : "") + " LIMIT " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N);
+            return sql;
+
         }
 
         public override DataTable SqlToDataTable(string sql)

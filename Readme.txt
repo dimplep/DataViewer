@@ -33,3 +33,16 @@ order by schema_name(tab.schema_id) + '.' + tab.name,
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 MYSQL
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Ref: https://stackoverflow.com/questions/20855065/how-to-find-all-the-relations-between-all-mysql-tables
+
+SELECT 
+  TABLE_NAME as ChildTable,
+  COLUMN_NAME as ChildKey,
+  REFERENCED_TABLE_NAME as ParentTable,
+ REFERENCED_COLUMN_NAME as ParentKey
+FROM
+ INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE
+  TABLE_SCHEMA = SCHEMA() 
+  AND REFERENCED_TABLE_NAME IS NOT NULL

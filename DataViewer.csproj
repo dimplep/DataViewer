@@ -5,14 +5,6 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Data\MYSQLDataAccess.cs_" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Data\MYSQLDataAccess.cs_" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="4.4.1" />
