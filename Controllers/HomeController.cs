@@ -59,7 +59,6 @@ namespace DataViewer.Controllers
             DataTable dt = _businessLayer.GetTableCriteriaData(model.table, model.criteria, model.topN, ref columnsForFrontEnd);
 
             return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd });
-            //return Json(new { recordsFiltered = 1, recordsTotal = 1, data = list.ToArray() });
         }
 
 

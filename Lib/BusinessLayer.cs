@@ -134,14 +134,16 @@ namespace DataViewer.Lib
                 .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.fromEntity
                         && r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.toEntity))
             {
-                // search by child key but set parent key because searching in parent
-                colVals.Add(new ColNameValueModel
+                string cNm = match.Field<string>(RelationDataColumns.PARENT_KEY);
+                string cVal = childTable.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString();
+
+                if (!colVals.Any(o => o.colName == cNm && o.colValue == cVal))
                 {
-                    colName = match.Field<string>(RelationDataColumns.PARENT_KEY),
-                    colValue = childTable.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString()
-                });
+                    colVals.Add(new ColNameValueModel{colName = cNm, colValue = cVal});
+                }
             }
-            return colVals;
+            
+            return colVals;     
         }
 
         private List<ColNameValueModel> ParentToChildColVals(RelatedDataSelectModel model, DataTable parentTable)
@@ -196,9 +198,26 @@ namespace DataViewer.Lib
         // find entities in relations where given entity contains foreign keys
         public List<string> GetParentEntities(MainTableRowSelectModel model)
         {
-            return _relations.AsEnumerable()
-                .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.table)
-                .Select(r => r.Field<string>(RelationDataColumns.PARENT_TABLE)).Distinct().OrderBy(o => o).ToList();
+            // get current maintable row
+            List<JQDTFriendlyColumnInfo> entityCols = _dataAccess.GetColumns(model.table);
+            string criteria = _dataAccess.ColNameValToCriteria(model.colNameVals, entityCols);
+            string sql = _dataAccess.BuildBasicSql("*", model.table, criteria, 1);
+            DataTable dt = _dataAccess.GetData(sql);
+
+            // for each foreignkeys make sure value is not null and then add to list
+            List<string> parents = new List<string>();
+            foreach(var relationRow in _relations.AsEnumerable()
+                .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.table))
+            {
+                string fkColName = relationRow.Field<string>(RelationDataColumns.CHILD_KEY);
+
+                if (dt.Rows[0][fkColName] != DBNull.Value)
+                {
+                    parents.Add(relationRow.Field<string>(RelationDataColumns.PARENT_TABLE));
+                }
+            }
+
+            return parents.Distinct().ToList();
         }
     }
 

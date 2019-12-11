@@ -1,4 +1,5 @@
 ﻿using DataViewer.Models;
+using Microsoft.SqlServer.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -32,6 +33,7 @@ namespace DataViewer.Lib
             }
             return occurances;
         }
+
         // Does jquery datatables friendly data conversion and creates a list
         public static List<dynamic> JQDTFriendlyTableData(this DataTable dt)
         {
@@ -42,6 +44,11 @@ namespace DataViewer.Lib
                 dynamicDt.Add(dyn);
                 foreach (DataColumn column in dt.Columns)
                 {
+                    if (column.DataType == typeof(SqlGeography))        // don't add column types that create problem in parsing ajax data
+                    {
+                        continue;
+                    }
+
                     var dict = (IDictionary<string, object>)dyn;
 
                     // convert data based on type
