@@ -103,6 +103,14 @@ namespace DataViewer.Lib
 
         public DataTable GetParentOrChildData(RelatedDataSelectModel model, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
         {
+            // set model.fromEntityForeignKey and remove fk from table name if needed (in case there are multiple fks for same parent)
+            if (model.toEntityType == RelationType.PARENT && model.toEntity.Contains(PARENT_TABLE_FK_SEPARATOR))
+            {
+                var elements = model.toEntity.Split(PARENT_TABLE_FK_SEPARATOR);
+                model.toEntity = elements[1];
+                model.fromEntityForeignKey = elements[0];
+            }
+
             List<JQDTFriendlyColumnInfo> fromEntityCols = _dataAccess.GetColumns(model.fromEntity);
             List<JQDTFriendlyColumnInfo> toEntityCols = _dataAccess.GetColumns(model.toEntity);
             string criteria = _dataAccess.ColNameValToCriteria(model.keyVals, fromEntityCols);
@@ -130,19 +138,31 @@ namespace DataViewer.Lib
         private List<ColNameValueModel> ChildToParentColVals(RelatedDataSelectModel model, DataTable childTable)
         {
             List<ColNameValueModel> colVals = new List<ColNameValueModel>();
+
+
             foreach (var match in _relations.AsEnumerable()
                 .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.fromEntity
                         && r.Field<string>(RelationDataColumns.PARENT_TABLE) == model.toEntity))
             {
                 string cNm = match.Field<string>(RelationDataColumns.PARENT_KEY);
-                string cVal = childTable.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString();
+                string cVal = "";
+                if (String.IsNullOrEmpty(model.fromEntityForeignKey))
+                {
+                    cVal = childTable.Rows[0][match.Field<string>(RelationDataColumns.CHILD_KEY)].ToString();
+                }
+                else
+                {
+                    // just in case child table contains multiple fk columns (e.g. billing address id, shipping address id )
+                    // assumed key is made of one column only (non composite)
+                    cVal = childTable.Rows[0][model.fromEntityForeignKey].ToString();
+                }
 
                 if (!colVals.Any(o => o.colName == cNm && o.colValue == cVal))
                 {
-                    colVals.Add(new ColNameValueModel{colName = cNm, colValue = cVal});
+                    colVals.Add(new ColNameValueModel { colName = cNm, colValue = cVal });
                 }
             }
-            
+
             return colVals;     
         }
 
@@ -205,19 +225,36 @@ namespace DataViewer.Lib
             DataTable dt = _dataAccess.GetData(sql);
 
             // for each foreignkeys make sure value is not null and then add to list
-            List<string> parents = new List<string>();
-            foreach(var relationRow in _relations.AsEnumerable()
+            var parentAndFk = new List<Tuple<string, string>>();
+            foreach (var relationRow in _relations.AsEnumerable()
                 .Where(r => r.Field<string>(RelationDataColumns.CHILD_TABLE) == model.table))
             {
                 string fkColName = relationRow.Field<string>(RelationDataColumns.CHILD_KEY);
 
                 if (dt.Rows[0][fkColName] != DBNull.Value)
                 {
-                    parents.Add(relationRow.Field<string>(RelationDataColumns.PARENT_TABLE));
+                    parentAndFk.Add(Tuple.Create(relationRow.Field<string>(RelationDataColumns.PARENT_TABLE), fkColName));
                 }
             }
 
-            return parents.Distinct().ToList();
+            // as child table can have multiple fk for same parent, for each fk add parent item separatly including fk name
+            List<string> parents = new List<string>();
+            foreach(var pGrp in parentAndFk.GroupBy(o => o.Item1).Select(g => new {table = g.Key, Count = g.Count() }))
+            {
+                if (pGrp.Count <= 1)
+                {
+                    parents.Add(pGrp.table);
+                }
+                else
+                {
+                    foreach(var match in parentAndFk.Where(o => o.Item1 == pGrp.table))
+                    {
+                        parents.Add(match.Item2 + PARENT_TABLE_FK_SEPARATOR + match.Item1);
+                    }
+                }
+            }
+
+            return parents;
         }
     }
 

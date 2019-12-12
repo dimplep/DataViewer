@@ -8,6 +8,7 @@ namespace DataViewer.Lib
     public class AppConst
     {
         public const int DEFAULT_TOP_N = 100;
+        public const string PARENT_TABLE_FK_SEPARATOR = " -> ";
         public static class JQDT_COL_ALIGN
         {
             public const string LEFT = "text-left";

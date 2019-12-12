@@ -3,6 +3,7 @@ const COLUMN_CATEGORY_TEXT = "text";      // text, str, char etc.
 const COLUMN_CATEGORY_NUMERIC = "numeric";  // int, decimal, float, bit etc.
 const COLUMN_CATEGORY_DATE = "date";      // date, datetime, time etc.
 const COLUMN_CATEGORY_BOOLEAN = "bool";      // bit
+const PARENT_TABLE_FK_SEPARATOR = " -> ";    // parent table selection will contain fk name if multiple fk in child (e.g. shipping and billing address ids in shipping header)
 
 // column info (returned from MVC) properties
 const COLUMN_INFO_NAME = "name";
@@ -112,6 +113,11 @@ function navigateFromParent() {
 
 function navigateFromParentOrChild(tableId, selectId) {
     var newMainEntity = $(selectId).val();
+    var index = newMainEntity.indexOf(PARENT_TABLE_FK_SEPARATOR);
+    if (index > 0) {
+        newMainEntity = newMainEntity.substring(index + PARENT_TABLE_FK_SEPARATOR.length, newMainEntity.length);
+    }
+
     var pkCriteria = primaryKeyCriteriaForSelectedRow(tableId);
     $(filterCriteriaTextArea).val(pkCriteria);
 
@@ -327,6 +333,7 @@ function primaryKeyCriteriaForSelectedRow(tableId) {
 
 
 function mainEntityChanged(newTable, leaveCriteriaTextAlone) {
+
     var data = { table: $(mainEntitySelect).val() };
     var result = getJsonSync(getColumnsUrl, data);
     //columnInfoArr = result.columns;

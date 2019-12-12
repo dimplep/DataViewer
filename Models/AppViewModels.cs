@@ -34,6 +34,7 @@ namespace DataViewer.Models
     public class RelatedDataSelectModel
     {
         public string fromEntity { get; set; }
+        public string fromEntityForeignKey { get; set; }        // used internally in backend only to determine results in case there are multiple fks for same parent
         public string toEntity { get; set; }
         public string toEntityType { get; set; }
         public List<ColNameValueModel> keyVals { get; set; }
