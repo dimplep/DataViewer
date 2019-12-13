@@ -13,7 +13,7 @@ namespace DataViewer.Data
         DataTable GetData(string sql);
         List<JQDTFriendlyColumnInfo> GetColumns(string table);
         string ColNameValToCriteria(List<ColNameValueModel> colNameVals, List<JQDTFriendlyColumnInfo> cols);
-        string BuildBasicSql(string cols, string from, string where, int topN);
+        string BuildBasicSql(string cols, string from, string where, string orderBy, string ascDesc, int topN);
     }
 
     public class DataAccess : IDataAccess
@@ -105,9 +105,17 @@ namespace DataViewer.Data
             return columns;
         }
 
-        public virtual string BuildBasicSql(string cols, string from, string where, int topN)
+        public virtual string BuildBasicSql(string cols, string from, string where, string orderBy, string ascDesc, int topN)
         {
-            string sql = "SELECT TOP " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N) + " " + cols + " FROM " + from + (where != "" ? " WHERE " + where : "");
+            string sql = "SELECT TOP " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N) + " " + cols
+                            + " FROM " + from + (where != "" ? " WHERE " + where : "");
+            
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                string order = " ORDER BY " + orderBy + " " + (string.IsNullOrEmpty(ascDesc) ? "DESC" : ascDesc);
+                sql += " " + order;
+            }
+
             return sql;
 
         }

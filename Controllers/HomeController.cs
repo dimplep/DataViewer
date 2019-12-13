@@ -56,9 +56,17 @@ namespace DataViewer.Controllers
         public IActionResult MainEntityDataFetch(EntityDataFetchModel model)
         {
             List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
-            DataTable dt = _businessLayer.GetTableCriteriaData(model.table, model.criteria, model.topN, ref columnsForFrontEnd);
+            DataTable dt = _businessLayer.GetTableCriteriaData(model, ref columnsForFrontEnd);
 
-            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd });
+            string orderByCol = model.orderBy;
+            int sortColIndex = 0;
+            if (!string.IsNullOrEmpty(model.orderBy))
+            {
+                sortColIndex = dt.Columns[orderByCol].Ordinal;
+            }
+
+            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd,
+                sortColIndex = sortColIndex, ascDesc = model.ascDesc.ToLower()});
         }
 
 
@@ -76,7 +84,9 @@ namespace DataViewer.Controllers
             List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
             DataTable dt = _businessLayer.GetParentOrChildData(model, ref columnsForFrontEnd);
 
-            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd });
+            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd,
+            sortColIndex = 0, ascDesc = model.ascDesc.ToLower()
+            });
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -32,7 +32,8 @@ var childEntitySelect = "#childEntitySelect";
 var hideIfNoDataCheck = '#hideIfNoDataCheck';
 var childNavigateFromBtn = '#childNavigateFromBtn';
 var parentNavigateFromBtn = '#parentNavigateFromBtn';
-
+var orderBySelect = '#orderBySelect';
+var ascDescSelect = '#ascDescSelect';
 
 // jquery datatables
 var mainDataTableId = "#mainDataTable";
@@ -123,7 +124,7 @@ function navigateFromParentOrChild(tableId, selectId) {
 
     $(mainEntitySelect).val(newMainEntity);
     mainEntityChanged(newMainEntity, true);
-    getMainEntityData();
+    getMainEntityData(true);
 }
 
 
@@ -183,6 +184,7 @@ function parentEntityChange(entity) {
             toEntity: entity,
             toEntityType: RELATION_PARENT,
             keyVals: selectedRowPkColAndValues(mainDataTableId),
+            ascDesc: $(ascDescSelect).val(),
             topN: $(topNText).val()
         };
 
@@ -212,6 +214,7 @@ function childEntityChange(entity) {
             toEntity: entity,
             toEntityType: RELATION_CHILD,
             keyVals: selectedRowPkColAndValues(mainDataTableId),
+            ascDesc: $(ascDescSelect).val(),
             topN: $(topNText).val()
         };
 
@@ -236,6 +239,8 @@ function setupInitialScreen(data, textStatus, xhr) {
 
     allOperators = data.operators;
     fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
+    fillSelectByProperty($(orderBySelect), data.columns, COLUMN_INFO_NAME);
+    
     fillSelect($(operatorSelect), data.operators);
 
     // set gui for first column
@@ -341,6 +346,8 @@ function mainEntityChanged(newTable, leaveCriteriaTextAlone) {
     jqDtColArr[indexOfArr] = result.columns;
 
     fillSelectByProperty($(columnSelect), result.columns, COLUMN_INFO_NAME);
+    fillSelectByProperty($(orderBySelect), result.columns, COLUMN_INFO_NAME);
+
     columnSelectionChanged($(columnSelect).val());
     setSectionsAfterEntityChange(leaveCriteriaTextAlone);
 }
@@ -369,8 +376,16 @@ function setSectionsAfterEntityChange(leaveCriteriaTextAlone) {
 //}
 
 // get main table data using main table and filter criteria
-function getMainEntityData() {
-    var model = { table: $(mainEntitySelect).val(), criteria: $(filterCriteriaTextArea).val(), topN: $(topNText).val() };
+function getMainEntityData(navigatingFromParentOrChild) {
+    // if clicked on main entity "Apply" button then only pass sort column
+
+    var orderByCol = "";
+    if (navigatingFromParentOrChild === undefined) {
+        orderByCol = $(orderBySelect).val();
+    }
+
+    var model = {
+        table: $(mainEntitySelect).val(), criteria: $(filterCriteriaTextArea).val(), orderBy: orderByCol, ascDesc: $(ascDescSelect).val(), topN: $(topNText).val() };
     //clearJQTableHeader(mainDataTableId);
     var result = getJsonSync(mainEntityDataGetUrl, model);
     fillJQTable(result, mainDataTableId);
@@ -404,7 +419,8 @@ function fillJQTable(result, tableName) {
             "data": result.data,
             "columns": result.columns,
             select: true,
-            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]]
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "All"]],
+            order: [result.sortColIndex, result.ascDesc]
             //destroy: true
         }
     );

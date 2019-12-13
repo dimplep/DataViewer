@@ -36,10 +36,19 @@ namespace DataViewer.Data
             return SqlToDataTable(sql);
         }
 
-        public override string BuildBasicSql(string cols, string from, string where, int topN)
+        public override string BuildBasicSql(string cols, string from, string where, string orderBy, string ascDesc, int topN)
         {
             string sql = "SELECT " + cols + " FROM " + from
-                + (where != "" ? " WHERE " + where : "") + " LIMIT " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N);
+                + (where != "" ? " WHERE " + where : "");
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                string order = " ORDER BY " + orderBy + " " + (string.IsNullOrEmpty(ascDesc) ? "DESC" : ascDesc);
+                sql += " " + order;
+            }
+
+            sql += " LIMIT " + (topN > 0 ? topN : AppConst.DEFAULT_TOP_N);
+
             return sql;
 
         }

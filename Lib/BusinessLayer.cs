@@ -56,20 +56,22 @@ namespace DataViewer.Lib
             return columns;
         }
 
-        public DataTable GetTableCriteriaData(string entityName, string criteria, int topN, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
+        public DataTable GetTableCriteriaData(EntityDataFetchModel model, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
         {
             // columnsForFrontEnd is filled by refernce
             //columns = dt.JQDTFriendlyColumnList();
             //List<ColumnInfo> cols = GetColumns(table);
 
-            string sql = _dataAccess.BuildBasicSql("*", entityName, criteria, topN);
+            
+
+            string sql = _dataAccess.BuildBasicSql("*", model.table, model.criteria, model.orderBy, model.ascDesc, model.topN);
 
             if (sql.Replace('\t', ' ').Replace('\r', ' ').Replace('\n', ' ').ToLower().Occurance(" from ") > 1)
             {
                 throw new Exception("Invalid SQL");     // poor man's sql injection prevention
             }
 
-            return EntitySqlToDtForFrontEnd(entityName, sql, ref columnsForFrontEnd);
+            return EntitySqlToDtForFrontEnd(model.table, sql, ref columnsForFrontEnd);
         }
 
         private DataTable EntitySqlToDtForFrontEnd(string entityName, string sql, ref List<JQDTFriendlyColumnInfo> columnsForFrontEnd)
@@ -114,7 +116,7 @@ namespace DataViewer.Lib
             List<JQDTFriendlyColumnInfo> fromEntityCols = _dataAccess.GetColumns(model.fromEntity);
             List<JQDTFriendlyColumnInfo> toEntityCols = _dataAccess.GetColumns(model.toEntity);
             string criteria = _dataAccess.ColNameValToCriteria(model.keyVals, fromEntityCols);
-            string sql = _dataAccess.BuildBasicSql("*", model.fromEntity, criteria, 1);
+            string sql = _dataAccess.BuildBasicSql("*", model.fromEntity, criteria, fromEntityCols[0].name, model.ascDesc, 1);
             DataTable dt = _dataAccess.GetData(sql);        // get from table row for passed pk values
 
             List<ColNameValueModel> colVals;
@@ -129,7 +131,7 @@ namespace DataViewer.Lib
             }
 
             string toCiteria = _dataAccess.ColNameValToCriteria(colVals, toEntityCols);
-            sql = _dataAccess.BuildBasicSql("*", model.toEntity, toCiteria, model.topN);
+            sql = _dataAccess.BuildBasicSql("*", model.toEntity, toCiteria, toEntityCols[0].name, model.ascDesc, model.topN);
             DataTable toDt = EntitySqlToDtForFrontEnd(model.toEntity, sql, ref columnsForFrontEnd);
 
             return toDt;
@@ -221,7 +223,7 @@ namespace DataViewer.Lib
             // get current maintable row
             List<JQDTFriendlyColumnInfo> entityCols = _dataAccess.GetColumns(model.table);
             string criteria = _dataAccess.ColNameValToCriteria(model.colNameVals, entityCols);
-            string sql = _dataAccess.BuildBasicSql("*", model.table, criteria, 1);
+            string sql = _dataAccess.BuildBasicSql("*", model.table, criteria, entityCols[0].name, "", 1);
             DataTable dt = _dataAccess.GetData(sql);
 
             // for each foreignkeys make sure value is not null and then add to list

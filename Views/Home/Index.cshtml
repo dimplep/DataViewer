@@ -47,19 +47,33 @@
             <table class="table">
                 <tbody>
                     <tr>
-                        <td class="fitwidth">
+                        <td style="width:auto">
                             <label for="filterCriteriaTextArea">Criteria:</label>
                         </td>
-                        <td>
-                            <textarea id="filterCriteriaTextArea" class="form-control" rows="2"></textarea>
+                        <td colspan="5" style="width:100%">
+                            <input id="filterCriteriaTextArea" class="form-control"/>
                         </td>
-                        <td class="fitwidth">
+                     </tr>
+                    <tr>
+                        <td style="width:auto">
+                            <label for="orderBySelect">Order: </label>
+                        </td>
+                        <td style="width:auto">
+                            <select id="orderBySelect" />
+                        </td>
+                        <td style="width:auto">
+                            <select id="ascDescSelect">
+                                <option value="Desc" selected>Desc</option>
+                                <option value="Asc">Asc</option>
+                            </select>
+                        </td>
+                        <td style="width:auto">
                             <label for="topNText">Top: </label>
                         </td>
-                        <td class="fitwidth">
+                        <td style="width:auto">
                             <input type="number" id="topNText" min="1" max="999" style="width:60px" value="100" />
                         </td>
-                        <td align="right" class="fitwidth">
+                        <td align="right" style="width:100%">
                             <input type="button" id="ApplyFilterBtn" value="Apply" class="btn-primary" onclick="getMainEntityData();" />
                         </td>
                     </tr>

@@ -21,6 +21,10 @@ namespace DataViewer.Models
                 return _criteria;
             }
         }
+
+        public string orderBy { set; get; }
+        public string ascDesc { set; get; }
+
         public int topN { set; get; }
     }
 
@@ -38,6 +42,7 @@ namespace DataViewer.Models
         public string toEntity { get; set; }
         public string toEntityType { get; set; }
         public List<ColNameValueModel> keyVals { get; set; }
+        public string ascDesc { set; get; }
         public int topN { get; set; }
     }
 
