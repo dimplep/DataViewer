@@ -13,6 +13,7 @@ using DataViewer.Data;
 
 namespace DataViewer.Controllers
 {
+    [Controller]
     public class HomeController : Controller
     {
         IDataAccess _dataAccess;

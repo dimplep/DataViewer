@@ -47,11 +47,11 @@ var jqDtColArr = [ null, null, null];   // stores datatable column info into arr
 var jqDtNameArr = [mainDataTableId, childDataTableId, parentDataTableId];
 
 /* MVC urls */
-var initialScreenDataUrl = '/Home/InitialScreenData';
-var getColumnsUrl = "/Home/GetColumns";
-var mainEntityDataGetUrl = "/Home/MainEntityDataFetch";
-var mainEntityRowSelectUrl = "/Home/MainEntityRowSelect";
-var parentOrChildGetData = "/Home/ParentOrChildGetData";
+var initialScreenDataUrl = 'Home/InitialScreenData';
+var getColumnsUrl = "Home/GetColumns";
+var mainEntityDataGetUrl = "Home/MainEntityDataFetch";
+var mainEntityRowSelectUrl = "Home/MainEntityRowSelect";
+var parentOrChildGetData = "Home/ParentOrChildGetData";
 
 $(document).ready(function () {
 
