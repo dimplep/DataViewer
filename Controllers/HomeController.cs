@@ -19,7 +19,6 @@ namespace DataViewer.Controllers
         BusinessLayer _businessLayer;
         public HomeController(IOptions<DateSettingOptions> op)
         {
-            
             string connStr = op.Value.ConnectionString;
             string dbms = op.Value.RDBMS;
             string relationsJsonFileName = op.Value.RelationsJsonFileName;
@@ -35,15 +34,29 @@ namespace DataViewer.Controllers
         [HttpGet]
         public IActionResult InitialScreenData()
         {
-            List<string> allTables = _businessLayer.AllTables();
+            try
+            {
+                List<string> allTables = _businessLayer.AllTables();
 
-            return Json(new { allTables = allTables, operators = _businessLayer.FilterOperators(), columns = _businessLayer.GetColumns(allTables[0])});
+                return Json(new { allTables = allTables, operators = _businessLayer.FilterOperators(), columns = _businessLayer.GetColumns(allTables[0]) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         [HttpGet]
         public IActionResult GetColumns(string table)
         {
-            return Json(new { columns = _businessLayer.GetColumns(table) });
+            try
+            {
+                return Json(new { columns = _businessLayer.GetColumns(table) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
         }
 
         //[HttpGet]
@@ -55,38 +68,71 @@ namespace DataViewer.Controllers
         [HttpGet]
         public IActionResult MainEntityDataFetch(EntityDataFetchModel model)
         {
-            List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
-            DataTable dt = _businessLayer.GetTableCriteriaData(model, ref columnsForFrontEnd);
-
-            string orderByCol = model.orderBy;
-            int sortColIndex = 0;
-            if (!string.IsNullOrEmpty(model.orderBy))
+            try
             {
-                sortColIndex = dt.Columns[orderByCol].Ordinal;
-            }
+                List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
+                DataTable dt = _businessLayer.GetTableCriteriaData(model, ref columnsForFrontEnd);
 
-            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd,
-                sortColIndex = sortColIndex, ascDesc = model.ascDesc.ToLower()});
+                string orderByCol = model.orderBy;
+                int sortColIndex = 0;
+                if (!string.IsNullOrEmpty(model.orderBy))
+                {
+                    sortColIndex = dt.Columns[orderByCol].Ordinal;
+                }
+
+                return Json(new
+                {
+                    recordsFiltered = dt.Rows.Count,
+                    recordsTotal = dt.Rows.Count,
+                    data = dt.JQDTFriendlyTableData(),
+                    columns = columnsForFrontEnd,
+                    sortColIndex = sortColIndex,
+                    ascDesc = model.ascDesc.ToLower()
+                });
+            }
+            catch(Exception ex)
+            {
+                return Json(new {error = ex.Message});
+            }
         }
 
 
         [HttpPost]
         public IActionResult MainEntityRowSelect([FromBody] MainTableRowSelectModel model)
         {
-
-            return Json(new { parentEntities = _businessLayer.GetParentEntities(model), childEntities = _businessLayer.GetChildEntities(model) });
-            //return Json(new { recordsFiltered = 1, recordsTotal = 1, data = list.ToArray() });
+            try
+            {
+                return Json(new { parentEntities = _businessLayer.GetParentEntities(model), childEntities = _businessLayer.GetChildEntities(model) });
+            }
+            catch(Exception ex)
+            {
+                return Json(new {error = ex.Message});
+            }
         }
 
         [HttpPost]
         public IActionResult ParentOrChildGetData([FromBody] RelatedDataSelectModel model)
         {
-            List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
-            DataTable dt = _businessLayer.GetParentOrChildData(model, ref columnsForFrontEnd);
+            try
+            {
+                List<JQDTFriendlyColumnInfo> columnsForFrontEnd = new List<JQDTFriendlyColumnInfo>();
+                DataTable dt = _businessLayer.GetParentOrChildData(model, ref columnsForFrontEnd);
 
-            return Json(new { recordsFiltered = dt.Rows.Count, recordsTotal = dt.Rows.Count, data = dt.JQDTFriendlyTableData(), columns = columnsForFrontEnd,
-            sortColIndex = 0, ascDesc = model.ascDesc.ToLower()
-            });
+                return Json(new
+                {
+                    recordsFiltered = dt.Rows.Count,
+                    recordsTotal = dt.Rows.Count,
+                    data = dt.JQDTFriendlyTableData(),
+                    columns = columnsForFrontEnd,
+                    sortColIndex = 0,
+                    ascDesc = model.ascDesc.ToLower()
+                });
+            }
+            catch(Exception ex)
+            {
+                return Json(new {error = ex.Message});
+            }
+
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

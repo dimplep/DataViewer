@@ -170,9 +170,21 @@ function selectedRowPkColAndValues(tableId) {
 }
 
 function setupParentChildSections(data, textStatus, xhr) {
-    // fill parent / child table selects
-    fillSelect($(parentEntitySelect), data.parentEntities, true);
-    fillSelect($(childEntitySelect), data.childEntities, true);
+    if (!isAjaxError(data)) {
+        // fill parent / child table selects
+        fillSelect($(parentEntitySelect), data.parentEntities, true);
+        fillSelect($(childEntitySelect), data.childEntities, true);
+    }
+}
+
+function isAjaxError(data) {
+    if (data.error !== undefined) {
+        alert(data.error);
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 function parentEntityChange(entity) {
@@ -197,7 +209,9 @@ function parentEntityChange(entity) {
 }
 
 function setupParentDataTable(data, textStatus, xhr) {
-    fillJQTable(data, parentDataTableId);
+    if (!isAjaxError(data)) {
+        fillJQTable(data, parentDataTableId);
+    }
 }
 
 
@@ -228,27 +242,32 @@ function childEntityChange(entity) {
 }
 
 function setupChildDataTable(data, textStatus, xhr) {
-    fillJQTable(data, childDataTableId);
+    if (!isAjaxError(data)) {
+        fillJQTable(data, childDataTableId);
+    }
 }
 
 function setupInitialScreen(data, textStatus, xhr) {
-    fillSelect($(mainEntitySelect), data.allTables);
-    //columnInfoArr = data.columns;
-    var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
-    jqDtColArr[indexOfArr] = data.columns;
 
-    allOperators = data.operators;
-    fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
-    fillSelectByProperty($(orderBySelect), data.columns, COLUMN_INFO_NAME);
-    
-    fillSelect($(operatorSelect), data.operators);
+    if (!isAjaxError(data)){
+        fillSelect($(mainEntitySelect), data.allTables);
+        //columnInfoArr = data.columns;
+        var indexOfArr = jqDtNameArr.indexOf(mainDataTableId);
+        jqDtColArr[indexOfArr] = data.columns;
 
-    // set gui for first column
-    //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
-    columnSelectionChanged($(columnSelect).val());
+        allOperators = data.operators;
+        fillSelectByProperty($(columnSelect), data.columns, COLUMN_INFO_NAME);
+        fillSelectByProperty($(orderBySelect), data.columns, COLUMN_INFO_NAME);
 
-    RefreshNavigationBtnForTable(childDataTableId);
-    RefreshNavigationBtnForTable(parentDataTableId);
+        fillSelect($(operatorSelect), data.operators);
+
+        // set gui for first column
+        //columnSelectionChanged(columnInfoArr[0][COLUMN_INFO_NAME]);
+        columnSelectionChanged($(columnSelect).val());
+
+        RefreshNavigationBtnForTable(childDataTableId);
+        RefreshNavigationBtnForTable(parentDataTableId);
+    }
 }
 
 function operatorChanged() {
@@ -463,6 +482,7 @@ function getJsonAsync(url, data, callback) {
         dataType: "json",
         success: callback,
         error: function (error) {
+            alert(error);
             return "ERROR";
         }
     });
@@ -479,6 +499,7 @@ function postJsonAsync(url, model, callback) {
         contentType: "application/json;charset=utf-8",
         success: callback,
         error: function (error) {
+            alert(error);
             return "ERROR";
         }
     });
@@ -496,9 +517,12 @@ function getJsonSync(url, data) {
         async: false,
         dataType: "json",
         success: function (jsonResult) {
-            result = jsonResult;
+            if (!isAjaxError(jsonResult)) {
+                result = jsonResult;
+            }
         },
         error: function (error) {
+            alert(error);
             return "ERROR";
         }
     });
